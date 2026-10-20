@@ -42,7 +42,7 @@ def _batch(tmp_path):
     (source / "Rajesh Venkataraman").mkdir(parents=True)
     (source / "Rajesh Venkataraman" / "letter.html").write_text(
         "<p>Mr Rajesh Venkataraman wrote in.</p>")
-    (source / "Erica Lee complaint.html").write_text("<p>Customer Erica Lee called.</p>")
+    (source / "Sheldon Cooper complaint.html").write_text("<p>Customer Sheldon Cooper called.</p>")
     (source / "Tom Baker.html").write_text("<p>Dear Tom Baker, thanks.</p>")
     (source / "Summary.html").write_text("<p>Nothing personal.</p>")
     return source
@@ -62,7 +62,7 @@ def test_run_keeps_folders_and_replaces_names(tmp_path, capsys):
     )
     letter, = (p for p in published if p.endswith("/letter.html"))
     assert letter.split("/")[0] in (files / letter).read_text()
-    for raw in ("Rajesh", "Venkataraman", "Erica", "Tom Baker"):
+    for raw in ("Rajesh", "Venkataraman", "Sheldon", "Tom Baker"):
         assert all(raw not in path for path in published)
         assert raw not in capsys.readouterr().out
     reports = tmp_path / "Batch-SANITISED" / "Batch-report"

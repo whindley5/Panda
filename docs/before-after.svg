@@ -32,14 +32,14 @@
 <path class="bar" d="M0.5 10.5 a10 10 0 0 1 10 -10 h759 a10 10 0 0 1 10 10 v24 h-779 z"/>
 <line class="rule" x1="0.5" x2="779.5" y1="34" y2="34"/>
 <circle class="dot" cx="20" cy="17" r="5"/><circle class="dot" cx="37" cy="17" r="5"/><circle class="dot" cx="54" cy="17" r="5"/>
-<text class="title" x="76" y="22">Erica Lee chat.html</text>
+<text class="title" x="76" y="22">Sheldon Cooper chat.html</text>
 <text class="tagpii" x="762" y="22" text-anchor="end">contains personal data</text>
-<text class="code" x="20" y="56" xml:space="preserve">[Customer]<tspan class="pii">Erica Lee</tspan> 09:12</text>
+<text class="code" x="20" y="56" xml:space="preserve">[Customer]<tspan class="pii">Sheldon Cooper</tspan> 09:12</text>
 <text class="code" x="20" y="79" xml:space="preserve">Hi, my DOB is <tspan class="pii">14/03/1984</tspan> and my mobile is <tspan class="pii">0412 908 771</tspan>.</text>
 <text class="code" x="20" y="102" xml:space="preserve">[agent]AU-0102 09:13</text>
-<text class="code" x="20" y="125" xml:space="preserve">Thanks <tspan class="pii">Erica</tspan>. Is <tspan class="pii">42 Kembla Street, Wollongong NSW 2500</tspan> current?</text>
-<text class="code" x="20" y="148" xml:space="preserve">[Customer]<tspan class="pii">Erica Lee</tspan> 09:14</text>
-<text class="code" x="20" y="171" xml:space="preserve">Yes. Account <tspan class="pii">ACC-5540912</tspan>, email <tspan class="pii">erica.lee@example.com</tspan></text>
+<text class="code" x="20" y="125" xml:space="preserve">Thanks <tspan class="pii">Sheldon</tspan>. Is <tspan class="pii">42 Kembla Street, Wollongong NSW 2500</tspan> current?</text>
+<text class="code" x="20" y="148" xml:space="preserve">[Customer]<tspan class="pii">Sheldon Cooper</tspan> 09:14</text>
+<text class="code" x="20" y="171" xml:space="preserve">Yes. Account <tspan class="pii">ACC-5540912</tspan>, email <tspan class="pii">sheldon.cooper@example.com</tspan></text>
 <text class="code" x="20" y="194" xml:space="preserve">我太太<tspan class="pii">王秀英</tspan>的电话是 <tspan class="pii">13512340987</tspan>。</text>
 </g>
 <line class="arrow" x1="390.0" y1="231" x2="390.0" y2="269"/>

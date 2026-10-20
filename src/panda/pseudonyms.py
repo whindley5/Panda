@@ -126,7 +126,7 @@ class DummyNames(FixedPseudonymiser):
     Names are handed out from the pool in order of first appearance and reused in a
     cycle once it runs out (`exhausted` is then set so the CLI can warn), so a
     transcript between a client and their spouse stays readable. The same person
-    keeps the same dummy for the whole job, and a fragment ("Erica", "Mr Lee") gets
+    keeps the same dummy for the whole job, and a fragment ("Sheldon", "Dr Cooper") gets
     the dummy of the full name it belongs to when that name was seen first. The
     assignments live in memory for one job only and are never written anywhere.
     """

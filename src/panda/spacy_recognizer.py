@@ -38,7 +38,7 @@ def _name_segment(raw: str) -> tuple[int, int] | None:
     """Return the span of the first field-delimited segment that holds a name word.
 
     Brackets and spaced dashes separate fields in chat headers and footers
-    ("Customer]Erica Lee", "Amelia Foster - Confidential - Acme internal").
+    ("Customer]Sheldon Cooper", "Amelia Foster - Confidential - Acme internal").
     """
     from panda.detectors import _NOT_NAME_WORDS, _ORGANISATION, _is_name_word
 

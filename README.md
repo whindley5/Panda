@@ -32,7 +32,7 @@ rewrote a simple, standalone version; used it for the class and then decided to 
 - **Handles messy text.** Chat exports, email threads and KYC forms, not just tidy
   sentences. Once Panda learns a name anywhere in a batch (a chat header, an email
   `From:` line, a form field), it replaces that name everywhere, including in passing
-  mentions like "Thank you Erica~".
+  mentions like "Thank you Sheldon~".
 - **Bilingual.** It recognises English and simplified-Chinese names and addresses
   (王女士, 老王, 我叫陈凯文), Australian and Chinese phone numbers, and checksum-validated
   Chinese resident IDs, TFNs and Medicare numbers.
@@ -102,7 +102,7 @@ Windows is not supported.
 
 | Kind | Examples found | Replaced with |
 |---|---|---|
-| **Names** | full names, first names or surnames on their own, nicknames, initials used as names, spelled-out names (`K A R I M I`), chat display names (`[Customer]EricaL`), 王女士 / 老王 / 我叫陈凯文 | a dummy name, e.g. `Alan Hollis` or `张三`; the same name gets the same dummy across the batch |
+| **Names** | full names, first names or surnames on their own, nicknames, initials used as names, spelled-out names (`K A R I M I`), chat display names (`[Customer]SheldonC`), 王女士 / 老王 / 我叫陈凯文 | a dummy name, e.g. `Alan Hollis` or `张三`; the same name gets the same dummy across the batch |
 | **Phone numbers** | AU mobiles and landlines in any spacing, `(02) 9555 0143`, `+61 …`, CN mobiles and landlines, any `+country` number | `0400000000` |
 | **Emails** | any address | `john.doe@example.com` |
 | **Dates of birth** | `14/03/1984`, `1984-03-14`, `3-Feb-79`, `1 April 1979`, `1985年3月12日`; any full date 16+ years old, or a recent one next to a birth cue | `01/01/1990` |
@@ -154,8 +154,8 @@ every output file an opaque name.
 
 ### Design decisions
 
-- **Two passes over the batch.** One file often reveals a full name ("Erica Lam" in an
-  email header) while another file only says "Erica". Collecting names across the whole
+- **Two passes over the batch.** One file often reveals a full name ("Sheldon Cooper" in an
+  email header) while another file only says "Sheldon". Collecting names across the whole
   batch first is what makes those passing mentions catchable.
 - **Don't trust a single pass.** The output is rescanned with the same detectors, and
   anything suspicious is held back under `UNVERIFIED/` rather than published. Work happens

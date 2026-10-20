@@ -211,8 +211,8 @@ def _is_name_word(word: str) -> bool:
 
 
 # A capitalised given name, optionally followed by one more capitalised word. The
-# name group is validated word by word afterwards, so "Thanks Erica Have a nice day"
-# keeps "Erica" and drops the stop word "Have".
+# name group is validated word by word afterwards, so "Thanks Sheldon Have a nice day"
+# keeps "Sheldon" and drops the stop word "Have".
 # Romanised Korean and Chinese given names are often hyphenated in lower case
 # ("Hyun-woo", "Min-jun"), so the part after a hyphen may start either way.
 _CAP_NAME = r"[A-Z][a-z]+(?:['’][A-Z][a-z]+)?(?:-[A-Za-z][a-z]+)?"
@@ -257,7 +257,7 @@ _ALIAS = re.compile(
     r"(?:[Ss]hows?|[Ll]ists?|[Hh]as)[ \t]+(?:me|him|her|them)[ \t]+as|[Ll]isted[ \t]+as)"
     rf"[ \t]+(?P<name>(?:[A-Z]\.[ \t]?){{1,2}}{_CAP_NAME}|[A-Z]{{2,4}})(?![A-Za-z])"
 )
-# Form-style labels, where upper-case names are common ("Name: ERICA LEE").
+# Form-style labels, where upper-case names are common ("Name: SHELDON COOPER").
 _NAME_LABEL = re.compile(
     r"\b(?:(?:[Ff]ull|[Ff]irst|[Ll]ast|[Gg]iven|[Mm]iddle|[Pp]referred|[Ff]amily|[Cc]ustomer|"
     r"[Cc]lient|[Aa]ccount(?:[ \t]+[Hh]older)?|[Hh]older|[Bb]eneficiary|[Rr]eferrer)[ \t]+)?"

@@ -47,7 +47,7 @@ class NamePlanner:
 
     def _detect(self, name: str):
         # Both spellings: separators hide word boundaries from name recognisers
-        # ("Erica_Lee"), but dots belong to emails and numbers. Same-length
+        # ("Sheldon_Cooper"), but dots belong to emails and numbers. Same-length
         # substitution keeps both sets of offsets on the original string.
         found = detect_in_context(name, self._engine)
         found += detect_in_context(_SEPARATORS.sub(" ", name), self._engine)

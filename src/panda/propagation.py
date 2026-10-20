@@ -2,7 +2,7 @@
 
 Recognisers work on local context, and chat transcripts are short on context: the
 customer's full name appears once after "your name please", then the agent writes
-"Thank you Erica~" twenty lines later and no model sees a person there. Once a value
+"Thank you Sheldon~" twenty lines later and no model sees a person there. Once a value
 has been identified anywhere in the job, every later occurrence is the same person
 and must be replaced too.
 
@@ -26,7 +26,7 @@ from panda.model import Confidence, Detection, PIIKind
 from panda.normalise import to_search_text
 
 _HAN = re.compile(r"[一-鿿]")
-# Splits CamelCase chat handles ("EricaL" -> "Erica", "L"; "JohnSmith" -> both parts).
+# Splits CamelCase chat handles ("SheldonC" -> "Sheldon", "C"; "JohnSmith" -> both parts).
 _CAMEL_PART = re.compile(r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])")
 _HONORIFIC_SUFFIX = re.compile(rf"(?:{'|'.join(ZH_HONORIFICS)})$")
 
@@ -259,7 +259,7 @@ class KnownTermsRecognizer:
                     alternatives.add(re.escape(value))
             if not alternatives:
                 continue
-            # Longest first, so "EricaL" is taken whole before "Erica" can match inside.
+            # Longest first, so "SheldonC" is taken whole before "Sheldon" can match inside.
             body = "|".join(sorted(alternatives, key=len, reverse=True))
             flags = re.IGNORECASE if kind is PIIKind.EMAIL else 0
             self._patterns.append(
