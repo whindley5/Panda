@@ -1,5 +1,6 @@
 """Private, time-isolated PDF extraction worker. Never emit parser diagnostics."""
 
+import contextlib
 import json
 import resource
 import sys
@@ -83,11 +84,9 @@ def main() -> int:
         # worker timeout.
         limits = Limits(**json.loads(sys.argv[2]))
         maximum = limits.pdf_memory_bytes
-        try:
+        # macOS rejects RLIMIT_AS; the expansion limits and timeout still apply.
+        with contextlib.suppress(ValueError, OSError):
             resource.setrlimit(resource.RLIMIT_AS, (maximum, maximum))
-        except (ValueError, OSError):
-            # macOS rejects RLIMIT_AS; the expansion limits and timeout still apply.
-            pass
         pages = extract(Path(sys.argv[1]), limits)
         sys.stdout.write(json.dumps(pages, ensure_ascii=True))
         return 0

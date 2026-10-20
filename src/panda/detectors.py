@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import sys
 from collections.abc import Iterable, Iterator
 from contextlib import contextmanager
 from contextvars import ContextVar
@@ -969,6 +970,19 @@ def detect_ner(text: str) -> list[Detection]:
         return []
     # Imported here, not at module load: jieba builds a prefix dictionary on first
     # use, about a second of work and several MB, which an English-only run never pays.
+    if "jieba" not in sys.modules:
+        # jieba 0.42.1 reads its dictionaries through pkg_resources whenever that imports.
+        # The pinned setuptools no longer ships it, and a stale stub left by an upgrade
+        # (macOS CI, Python 3.11) imports without resource_stream: force jieba's open().
+        saved = sys.modules.get("pkg_resources")
+        sys.modules["pkg_resources"] = None
+        try:
+            import jieba.posseg
+        finally:
+            if saved is None:
+                del sys.modules["pkg_resources"]
+            else:
+                sys.modules["pkg_resources"] = saved
     import jieba
     import jieba.posseg as pseg
 

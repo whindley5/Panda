@@ -1,3 +1,7 @@
+import os
+import subprocess
+import sys
+
 import pytest
 
 from panda.detectors import (
@@ -182,6 +186,18 @@ class TestNer:
         """Segmentation runs on folded text; the span must recover the real characters."""
         (found,) = self._addresses("上海市浦东新区世纪大道１００号")
         assert "１００" in found.text and found.text.endswith("号")
+
+    def test_stale_pkg_resources_stub_does_not_break_jieba(self, tmp_path):
+        """An empty pkg_resources directory imports but has no resource_stream."""
+        (tmp_path / "pkg_resources").mkdir()
+        code = ("from panda.detectors import detect_ner\n"
+                "print(detect_ner('请问是张伟先生吗')[0].text)")
+        env = {**os.environ, "PYTHONPATH": os.pathsep.join(
+            [str(tmp_path), *filter(None, [os.environ.get("PYTHONPATH")])])}
+        result = subprocess.run([sys.executable, "-c", code], env=env,
+                                capture_output=True, text=True, timeout=120)
+        assert result.returncode == 0, result.stderr[-2000:]
+        assert result.stdout.strip() == "张伟"
 
     def test_bare_city_mention_is_not_an_address(self):
         """Without a street-level suffix it is a locality, not worth redacting."""
