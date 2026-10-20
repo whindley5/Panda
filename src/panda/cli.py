@@ -15,9 +15,11 @@ import argparse
 import contextlib
 import itertools
 import json
+import os
 import shutil
 import sys
 import tempfile
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -26,7 +28,6 @@ from panda.console import Console, plural
 from panda.detectors import default_detector_engine, organisation
 from panda.errors import UnsupportedError, refusal_reason
 from panda.formats import (
-    PLANNED_EXTENSIONS,
     Discovery,
     assert_regular_path,
     discover,
@@ -196,17 +197,21 @@ def _results_root(source: Path) -> tuple[Path, str]:
     raise AssertionError("unreachable")
 
 
-def _describe_unsupported(path: Path) -> str:
-    """Explain why a file was refused, distinguishing unbuilt from out of scope."""
-    if path.suffix.lower() in PLANNED_EXTENSIONS:
-        return (
-            "E_UNSUPPORTED: no handler built yet for this format;"
-            " use HTML, EML, DOCX or text-layer PDF"
-        )
-    return (
-        "E_UNSUPPORTED: file is not a supported format;"
-        " supported: HTML, EML, DOCX, text-layer PDF"
-    )
+_UNSUPPORTED_REASON = (
+    "E_UNSUPPORTED: file is not a supported format; supported: HTML, EML, DOCX, text-layer PDF"
+)
+
+
+def _real_parent(path: Path | None) -> Path | None:
+    """Resolve links above the chosen folder; the folder itself stays unresolved.
+
+    System folders such as macOS /tmp are links, so they are trusted once here, while a
+    linked chosen folder, or any link inside it, is still refused.
+    """
+    if path is None:
+        return None
+    path = path.absolute()
+    return path.parent.resolve() / path.name
 
 
 def _paths_overlap(first: Path, second: Path) -> bool:
@@ -288,6 +293,15 @@ def _with_propagated_terms(paths, scratch_parent, pseudonymiser, engine, console
     return engine.with_provider(KnownTermsRecognizer(terms, exempt=ALL_FIXED_SURROGATES))
 
 
+@dataclass
+class _Staging:
+    """Private directories beside each destination, recorded so cleanup removes only them."""
+
+    output: Path | None = None
+    report: Path | None = None
+    identities: dict[Path, os.stat_result] = field(default_factory=dict)
+
+
 @bounded
 def command_run(args: argparse.Namespace) -> int:
     register_defaults()
@@ -314,224 +328,65 @@ def command_run(args: argparse.Namespace) -> int:
     )
 
     outcomes = {}
-    for index, path in enumerate(found.unsupported, start=len(found.supported) + 1):
+    for index in range(len(found.supported) + 1, found.total + 1):
         outcomes[f"file-{index:04d}"] = "skipped/unsupported"
-        console.notice(f"file-{index:04d} skipped: {_describe_unsupported(path)}")
+        console.notice(f"file-{index:04d} skipped: {_UNSUPPORTED_REASON}")
 
     if not found.supported:
         _print_outcomes(console, outcomes)
         return EXIT_UNSANITISED
 
-    source_identities = found.identities
     pseudonymiser = DummyNames()
     detector_engine = default_detector_engine()
     detector_engine.prepare()
     console.step("Language model ready (offline)")
-    staged_output = None
-    staged_report = None
-    staging_identities = {}
-    replacement_counts = {}
-    generated_dummies = {}
+    staged = _Staging()
     try:
-        staged_output = _new_staging_dir(args.output)
-        staging_identities[staged_output] = staged_output.stat()
-        staged_report = _new_staging_dir(args.report)
-        staging_identities[staged_report] = staged_report.stat()
+        _stage(staged, args)
         verify_discovery(found)
         detector_engine = _with_propagated_terms(
-            found.supported, staged_output.parent, pseudonymiser, detector_engine, console,
+            found.supported, staged.output.parent, pseudonymiser, detector_engine, console,
         )
         console.step("Collected names and identifiers from across the batch")
-        sources = {
-            f"file-{index:04d}": path for index, path in enumerate(found.supported, start=1)
-        }
-        for index, path in enumerate(found.supported, start=1):
-            # Source names and directory names may themselves contain PII, so the job
-            # runs on opaque ordinals; readable names are applied after verification.
-            safe_id = f"file-{index:04d}"
-            safe_name = f"{safe_id}{path.suffix.lower()}"
-            handler = handler_for(path)
-            assert handler is not None  # discover only lists a path if a handler exists
-            try:
-                if file_identity(path) != source_identities[path]:
-                    raise ValueError("source changed after discovery")
-                result = handler(
-                    path, staged_output / safe_name, pseudonymiser, detector_engine
-                )
-                if file_identity(path) != source_identities[path]:
-                    raise ValueError("source changed during extraction")
-                # Scope exemptions to replacements returned by this file's handler,
-                # including retained nested container parts; never persist raw values.
-                output_paths = [
-                    item for item in staged_output.iterdir()
-                    if item.name.startswith(safe_id + ".")
-                ]
-                if not output_paths:
-                    raise ValueError("handler produced no output")
-                for output_path in output_paths:
-                    if output_path.is_file():
-                        generated_dummies[output_path] = frozenset(
-                            item.surrogate.casefold() for item in result.replacements
-                        )
-                report_path = staged_report / f"{safe_id}.json"
-                write_report(
-                    report_path,
-                    build_report(safe_id, result, detector_engine.identity),
-                )
-            except Exception as error:
-                # Exception messages and filenames can contain raw source values. Only
-                # expose the stable batch position and exception category.
-                status = (
-                    "skipped/unsupported" if isinstance(error, UnsupportedError)
-                    else "processing error"
-                )
-                verb = "skipped" if status == "skipped/unsupported" else "failed"
-                (console.notice if verb == "skipped" else console.problem)(
-                    f"{safe_id} {verb} ({safe_exception_category(error)}): "
-                    f"{refusal_reason(error)}"
-                )
-                outcomes[safe_id] = status
-                console.progress(index, len(found.supported), "Sanitising")
-                continue
-            outcomes[safe_id] = "sanitised"
-            replacement_counts[safe_id] = len(result.replacements)
-            console.progress(index, len(found.supported), "Sanitising")
-
-        done = len(replacement_counts)
+        replacement_counts, generated_dummies = _sanitise_all(
+            found, staged, pseudonymiser, detector_engine, console, outcomes,
+        )
+        if pseudonymiser.exhausted:
+            console.warning(
+                "More people than dummy names: some dummies stand for more than one person"
+            )
         console.step(
-            f"Sanitised {done} of {plural(len(found.supported), 'file')} {console.dot} "
-            f"{plural(sum(replacement_counts.values()), 'replacement')}"
+            f"Sanitised {len(replacement_counts)} of {plural(len(found.supported), 'file')} "
+            f"{console.dot} {plural(sum(replacement_counts.values()), 'replacement')}"
         )
-        leaks = _scan_for_publication(
-            staged_output, detector_engine,
-            generated_dummies=generated_dummies,
-        )
-        for leak in leaks.leaks:
-            safe_id = leak.path.name.split(".")[0]
-            if outcomes.get(safe_id) == "sanitised":
-                outcomes[safe_id] = "residual PII"
-        for path in leaks.unscannable:
-            outcomes[path.name.split(".")[0]] = "processing error"
-        file_ids = {
-            path: path.name.split(".")[0] for path in (*leaks.scanned, *leaks.unscannable)
-        }
         # A completed handler result is useful for debugging even if its scan fails.
         retained = set(replacement_counts)
-        # Remove incomplete handler artifacts, including partial writes.
-        # Unknown artifacts cannot be attributed safely and must refuse publication.
-        for stage in (staged_output, staged_report):
-            for artifact in stage.iterdir():
-                safe_id = artifact.name.split(".")[0]
-                if safe_id not in outcomes:
-                    raise ValueError("unattributed staged artifact")
-                if safe_id not in retained:
-                    if artifact.is_dir() and not artifact.is_symlink():
-                        shutil.rmtree(artifact)
-                    else:
-                        artifact.unlink()
+        verified, debug, file_ids = _verify_or_quarantine(
+            staged, outcomes, retained, detector_engine, generated_dummies,
+        )
         if not retained:
             _print_outcomes(console, outcomes)
             console.line()
             console.line(console.red("Nothing published: no file could be sanitised."))
             return EXIT_UNSANITISED
         partial = len(retained) != len(outcomes)
-        # Recheck the exact retained subset after incomplete handler writes are removed.
-        verified = _scan_for_publication(
-            staged_output, detector_engine,
-            generated_dummies=generated_dummies,
-        )
-        debug = (
-            any(outcomes[key] != "sanitised" for key in retained)
-            or not verified.clean or not verified.scanned
-        )
         if debug:
             console.problem(console.red("Rescan found possible PII or could not check a file"))
             _print_leak_summary(console, verified, file_ids)
-            for leak in verified.leaks:
-                outcomes[leak.path.name.split(".")[0]] = "residual PII"
-            for path in verified.unscannable:
-                outcomes[path.name.split(".")[0]] = "processing error"
-            # A separate, conspicuous subtree prevents debug artifacts looking like
-            # ordinary verified output. The marker also makes standalone check refuse.
-            artifacts = list(staged_output.iterdir())
-            debug_dir = staged_output / "UNVERIFIED"
-            debug_dir.mkdir()
-            for artifact in artifacts:
-                artifact.rename(debug_dir / artifact.name)
-            warning = "UNVERIFIED DEBUG OUTPUT: may contain PII. Do not share.\n"
-            (staged_output / UNVERIFIED_MARKER).write_text(warning, encoding="utf-8")
-            (debug_dir / UNVERIFIED_MARKER).write_text(warning, encoding="utf-8")
-
-        output_names: dict[str, list[str]] = {}
-        if not debug:
+        else:
             console.step("Rescan: configured recognisers found no PII in the output")
         if not getattr(args, "opaque_names", False):
-            # Renaming happens only now, so everything above stays keyed by ordinal.
-            output_names = apply_output_names(
-                staged_output / "UNVERIFIED" if debug else staged_output,
-                {
-                    safe_id: path for safe_id, path in sources.items()
-                    if safe_id in retained
-                },
-                args.input, pseudonymiser, detector_engine,
+            _name_outputs(
+                args, staged, found, retained, debug, pseudonymiser, detector_engine, console,
             )
-            for safe_id, names in output_names.items():
-                report_path = staged_report / f"{safe_id}.json"
-                report = json.loads(report_path.read_text(encoding="utf-8"))
-                write_report(report_path, {**report, "outputs": names})
-            opaque = len(retained) - len(output_names)
-            if opaque:
-                console.warning(
-                    f"Named outputs after their source files; {opaque} name(s) could not "
-                    "be made safe and are file-NNNN instead"
-                )
-            else:
-                console.step("Named outputs after their source files (PII in names replaced)")
-
-        write_report(
-            staged_report / "run.json",
-            {
-                "completed_utc": datetime.now(timezone.utc).isoformat(),  # noqa: UP017
-                "files": len(retained),
-                "outcomes": outcomes,
-                "batch_status": (
-                    "unverified_debug" if debug else ("partial" if partial else "complete")
-                ),
-                "replacements": sum(replacement_counts[key] for key in retained),
-                "recognisers": list(detector_engine.identity),
-                "output_names": "opaque" if getattr(args, "opaque_names", False) else "source",
-                "verification": {
-                    "status": "failed" if debug else "clean_for_configured_recognisers",
-                    "files_scanned": len(verified.scanned),
-                    "recognised_dummies": verified.recognised_dummies,
-                },
-            },
+        _write_run_summary(
+            args, staged, outcomes, retained, replacement_counts, partial, debug, verified,
+            detector_engine, console,
         )
-
-        if getattr(args, "html", False):
-            try:
-                write_html_report(staged_report, batch=batch_name(args.report))
-            except Exception as error:
-                # A convenience view; the JSON reports remain the record.
-                console.warning(
-                    f"Visual report not written ({safe_exception_category(error)})"
-                )
-                args.html = False
-
-        verify_discovery(found)
-        final_discovery = discover(args.input)
-        if (
-            final_discovery.unsupported != found.unsupported
-            or final_discovery.supported != found.supported
-            or any(
-                file_identity(path) != identity
-                for path, identity in source_identities.items()
-            )
-        ):
-            raise ValueError("source changed during job")
+        _assert_source_unchanged(args.input, found)
 
         try:
-            _promote_staged(staged_output, args.output, staged_report, args.report)
+            _promote_staged(staged.output, args.output, staged.report, args.report)
         except OSError as error:
             console.problem(
                 "refusing batch: could not publish output "
@@ -539,41 +394,240 @@ def command_run(args: argparse.Namespace) -> int:
             )
             return EXIT_UNSANITISED
 
-        _print_outcomes(console, outcomes)
-        console.line()
-        if debug:
-            console.line(console.red(console.bold(
-                "UNVERIFIED: output may still contain PII. Do not share it."
-            )))
-            console.line("  Files are under UNVERIFIED/ for checking only; fix and rerun.")
-        elif partial:
-            console.line(console.yellow(console.bold(
-                f"Done, with gaps: {len(retained)} of {plural(len(outcomes), 'file')} "
-                "sanitised and verified."
-            )))
-            console.line("  Skipped and failed files are not in the output (see above).")
-        else:
-            console.line(console.green(console.bold(
-                f"Done: {'all ' if len(retained) > 1 else ''}{plural(len(retained), 'file')} "
-                "sanitised and verified."
-            )))
-        _print_destinations(console, args)
-        if not debug:
-            console.line(console.dim("  Automated detection can miss things: read the output "
-                                     "before handing it off."))
+        _print_result(console, args, outcomes, retained, partial, debug)
         return EXIT_DEBUG if debug else (EXIT_PARTIAL if partial else EXIT_OK)
     finally:
-        # Never roll back published paths or delete a replacement staging entry.
-        for stage in (staged_output, staged_report):
-            if stage is None:
-                continue
-            try:
-                current = stage.lstat()
-                original = staging_identities[stage]
-                if (current.st_dev, current.st_ino) == (original.st_dev, original.st_ino):
-                    shutil.rmtree(stage, ignore_errors=True)
-            except OSError:
-                pass
+        _cleanup(staged)
+
+
+def _stage(staged: _Staging, args: argparse.Namespace) -> None:
+    staged.output = _new_staging_dir(args.output)
+    staged.identities[staged.output] = staged.output.stat()
+    staged.report = _new_staging_dir(args.report)
+    staged.identities[staged.report] = staged.report.stat()
+
+
+def _cleanup(staged: _Staging) -> None:
+    """Never roll back published paths or delete a replacement staging entry."""
+    for stage in (staged.output, staged.report):
+        if stage is None:
+            continue
+        try:
+            current = stage.lstat()
+            original = staged.identities[stage]
+            if (current.st_dev, current.st_ino) == (original.st_dev, original.st_ino):
+                shutil.rmtree(stage, ignore_errors=True)
+        except OSError:
+            pass
+
+
+def _sanitise_all(found, staged, pseudonymiser, detector_engine, console, outcomes):
+    """Run each handler into staging; returns replacement counts and per-output dummies."""
+    replacement_counts: dict[str, int] = {}
+    generated_dummies: dict[Path, frozenset[str]] = {}
+    for index, path in enumerate(found.supported, start=1):
+        # Source names and directory names may themselves contain PII, so the job
+        # runs on opaque ordinals; readable names are applied after verification.
+        safe_id = f"file-{index:04d}"
+        safe_name = f"{safe_id}{path.suffix.lower()}"
+        handler = handler_for(path)
+        assert handler is not None  # discover only lists a path if a handler exists
+        try:
+            if file_identity(path) != found.identities[path]:
+                raise ValueError("source changed after discovery")
+            result = handler(path, staged.output / safe_name, pseudonymiser, detector_engine)
+            if file_identity(path) != found.identities[path]:
+                raise ValueError("source changed during extraction")
+            # Scope exemptions to replacements returned by this file's handler,
+            # including retained nested container parts; never persist raw values.
+            output_paths = [
+                item for item in staged.output.iterdir()
+                if item.name.startswith(safe_id + ".")
+            ]
+            if not output_paths:
+                raise ValueError("handler produced no output")
+            for output_path in output_paths:
+                if output_path.is_file():
+                    generated_dummies[output_path] = frozenset(
+                        item.surrogate.casefold() for item in result.replacements
+                    )
+            write_report(
+                staged.report / f"{safe_id}.json",
+                build_report(safe_id, result, detector_engine.identity),
+            )
+        except Exception as error:
+            # Exception messages and filenames can contain raw source values. Only
+            # expose the stable batch position and exception category.
+            status = (
+                "skipped/unsupported" if isinstance(error, UnsupportedError)
+                else "processing error"
+            )
+            verb = "skipped" if status == "skipped/unsupported" else "failed"
+            (console.notice if verb == "skipped" else console.problem)(
+                f"{safe_id} {verb} ({safe_exception_category(error)}): "
+                f"{refusal_reason(error)}"
+            )
+            outcomes[safe_id] = status
+            console.progress(index, len(found.supported), "Sanitising")
+            continue
+        outcomes[safe_id] = "sanitised"
+        replacement_counts[safe_id] = len(result.replacements)
+        console.progress(index, len(found.supported), "Sanitising")
+    return replacement_counts, generated_dummies
+
+
+def _record_scan(outcomes: dict[str, str], report: LeakReport) -> None:
+    for leak in report.leaks:
+        safe_id = leak.path.name.split(".")[0]
+        if outcomes.get(safe_id) == "sanitised":
+            outcomes[safe_id] = "residual PII"
+    for path in report.unscannable:
+        outcomes[path.name.split(".")[0]] = "processing error"
+
+
+def _verify_or_quarantine(staged, outcomes, retained, detector_engine, generated_dummies):
+    """Rescan staged output, drop failed files' artifacts, and move unverified output aside.
+
+    Returns the verification scan, whether the batch is debug-only, and file ids by path.
+    """
+    leaks = _scan_for_publication(
+        staged.output, detector_engine, generated_dummies=generated_dummies,
+    )
+    _record_scan(outcomes, leaks)
+    file_ids = {
+        path: path.name.split(".")[0] for path in (*leaks.scanned, *leaks.unscannable)
+    }
+    # Remove incomplete handler artifacts, including partial writes.
+    # Unknown artifacts cannot be attributed safely and must refuse publication.
+    removed_output = False
+    for stage in (staged.output, staged.report):
+        for artifact in stage.iterdir():
+            safe_id = artifact.name.split(".")[0]
+            if safe_id not in outcomes:
+                raise ValueError("unattributed staged artifact")
+            if safe_id not in retained:
+                removed_output |= stage == staged.output
+                if artifact.is_dir() and not artifact.is_symlink():
+                    shutil.rmtree(artifact)
+                else:
+                    artifact.unlink()
+    if not retained:
+        return leaks, True, file_ids
+    # Recheck the exact retained subset only if removing artifacts changed the output.
+    verified = leaks
+    if removed_output:
+        verified = _scan_for_publication(
+            staged.output, detector_engine, generated_dummies=generated_dummies,
+        )
+    debug = (
+        any(outcomes[key] != "sanitised" for key in retained)
+        or not verified.clean or not verified.scanned
+    )
+    if debug:
+        _record_scan(outcomes, verified)
+        # A separate, conspicuous subtree prevents debug artifacts looking like
+        # ordinary verified output. The marker also makes standalone check refuse.
+        artifacts = list(staged.output.iterdir())
+        debug_dir = staged.output / "UNVERIFIED"
+        debug_dir.mkdir()
+        for artifact in artifacts:
+            artifact.rename(debug_dir / artifact.name)
+        warning = "UNVERIFIED DEBUG OUTPUT: may contain PII. Do not share.\n"
+        (staged.output / UNVERIFIED_MARKER).write_text(warning, encoding="utf-8")
+        (debug_dir / UNVERIFIED_MARKER).write_text(warning, encoding="utf-8")
+    return verified, debug, file_ids
+
+
+def _name_outputs(args, staged, found, retained, debug, pseudonymiser, detector_engine, console):
+    """Rename outputs after their sources; runs last, so everything before stays ordinal."""
+    sources = {
+        f"file-{index:04d}": path for index, path in enumerate(found.supported, start=1)
+    }
+    output_names = apply_output_names(
+        staged.output / "UNVERIFIED" if debug else staged.output,
+        {safe_id: path for safe_id, path in sources.items() if safe_id in retained},
+        args.input, pseudonymiser, detector_engine,
+    )
+    for safe_id, names in output_names.items():
+        report_path = staged.report / f"{safe_id}.json"
+        report = json.loads(report_path.read_text(encoding="utf-8"))
+        write_report(report_path, {**report, "outputs": names})
+    opaque = len(retained) - len(output_names)
+    if opaque:
+        console.warning(
+            f"Named outputs after their source files; {opaque} name(s) could not "
+            "be made safe and are file-NNNN instead"
+        )
+    else:
+        console.step("Named outputs after their source files (PII in names replaced)")
+
+
+def _write_run_summary(
+    args, staged, outcomes, retained, replacement_counts, partial, debug, verified,
+    detector_engine, console,
+):
+    write_report(
+        staged.report / "run.json",
+        {
+            "completed_utc": datetime.now(timezone.utc).isoformat(),  # noqa: UP017
+            "files": len(retained),
+            "outcomes": outcomes,
+            "batch_status": (
+                "unverified_debug" if debug else ("partial" if partial else "complete")
+            ),
+            "replacements": sum(replacement_counts[key] for key in retained),
+            "recognisers": list(detector_engine.identity),
+            "output_names": "opaque" if getattr(args, "opaque_names", False) else "source",
+            "verification": {
+                "status": "failed" if debug else "clean_for_configured_recognisers",
+                "files_scanned": len(verified.scanned),
+                "recognised_dummies": verified.recognised_dummies,
+            },
+        },
+    )
+    if getattr(args, "html", False):
+        try:
+            write_html_report(staged.report, batch=batch_name(args.report))
+        except Exception as error:
+            # A convenience view; the JSON reports remain the record.
+            console.warning(f"Visual report not written ({safe_exception_category(error)})")
+            args.html = False
+
+
+def _assert_source_unchanged(input_dir: Path, found: Discovery) -> None:
+    verify_discovery(found)
+    final_discovery = discover(input_dir)
+    if (
+        final_discovery.unsupported != found.unsupported
+        or final_discovery.supported != found.supported
+        or any(file_identity(path) != identity for path, identity in found.identities.items())
+    ):
+        raise ValueError("source changed during job")
+
+
+def _print_result(console, args, outcomes, retained, partial, debug) -> None:
+    _print_outcomes(console, outcomes)
+    console.line()
+    if debug:
+        console.line(console.red(console.bold(
+            "UNVERIFIED: output may still contain PII. Do not share it."
+        )))
+        console.line("  Files are under UNVERIFIED/ for checking only; fix and rerun.")
+    elif partial:
+        console.line(console.yellow(console.bold(
+            f"Done, with gaps: {len(retained)} of {plural(len(outcomes), 'file')} "
+            "sanitised and verified."
+        )))
+        console.line("  Skipped and failed files are not in the output (see above).")
+    else:
+        console.line(console.green(console.bold(
+            f"Done: {'all ' if len(retained) > 1 else ''}{plural(len(retained), 'file')} "
+            "sanitised and verified."
+        )))
+    _print_destinations(console, args)
+    if not debug:
+        console.line(console.dim("  Automated detection can miss things: read the output "
+                                 "before handing it off."))
 
 
 _OUTCOME_LABELS = (
@@ -722,7 +776,10 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "run":
         if (args.folder is None) == (args.input is None):
             parser.error("provide either folder or --input")
-        args.input = args.folder if args.folder is not None else args.input
+        args.input = _real_parent(args.folder if args.folder is not None else args.input)
+        args.report = _real_parent(args.report)
+    if args.command in {"run", "check"}:
+        args.output = _real_parent(args.output)
     terms = _keep_terms(parser, args)
     try:
         if args.command == "run":

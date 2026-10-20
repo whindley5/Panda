@@ -215,6 +215,7 @@ put the two result trees into separate new folders.
 | `E_IMAGE_ONLY` | The PDF has no text layer; OCR is not supported. |
 | `E_UNSUPPORTED` | Export to a supported format. |
 | `E_MALFORMED` | Re-export the document; it could not be safely parsed. |
+| `E_LINKED` | Run on the real folder (`realpath FOLDER`); replace symbolic links inside it with real files. |
 | `E_CAPACITY` | Split the job. Limits are 16 MiB per file, and 1,000 files or 256 MiB per run. |
 | `E_PERMISSION` / `E_DISK` | Check permissions and free space; use fresh destinations. |
 </details>

@@ -132,7 +132,7 @@ def _canonical_structure(part: EmailMessage) -> None:
 # Attachment extensions we sanitise and re-embed as the same attachment. Only formats
 # whose handler emits the same container type belong here: `.html` -> html, `.docx` ->
 # docx. A `.pdf` handler emits a `.txt` transcript, which is not a PDF, so a PDF is not
-# embeddable and is handled by drop-but-name instead (see below and AGENTS.md).
+# embeddable and is handled by drop-but-name instead (see below).
 _EMBEDDABLE = frozenset({".html", ".htm", ".docx"})
 
 # Attachment extensions dropped for content but kept as a named placeholder, so the audit

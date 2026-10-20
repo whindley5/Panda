@@ -62,7 +62,7 @@ class LeakReport:
     # Files that could not be decoded as text, so nothing could be verified about
     # them. Kept apart from leaks because the operator's next step differs: a leak
     # means detection missed something, an unscannable file means the check itself
-    # could not run and format-aware extraction is needed (arriving with the handlers).
+    # could not run on it.
     unscannable: list[Path] = field(default_factory=list)
     # Safe exception categories, never exception messages (which may contain PII).
     failure_reasons: dict[Path, str] = field(default_factory=dict)
@@ -115,8 +115,20 @@ def _read_text(path: Path) -> list[ExtractedText] | None:
         return None
 
 
+def _dummy_coverage(text: str, allowed: frozenset[str]) -> bytearray:
+    """Mark every character inside an occurrence of an allowed dummy; once per unit."""
+    folded = text.casefold()
+    covered = bytearray(len(text))
+    for dummy in allowed:
+        position = folded.find(dummy)
+        while position != -1:
+            covered[position : position + len(dummy)] = b"\x01" * len(dummy)
+            position = folded.find(dummy, position + 1)
+    return covered
+
+
 def _only_dummies(
-    text: str, start: int, end: int, allowed: frozenset[str], kind: PIIKind | None = None
+    text: str, start: int, end: int, covered: bytearray, kind: PIIKind | None = None
 ) -> bool:
     """True when nothing identifying in the detected span lies outside a known dummy.
 
@@ -127,13 +139,6 @@ def _only_dummies(
     except that digits glued to a name dummy ("John Doe-2026-0417") are a reference,
     not part of the person.
     """
-    folded = text.casefold()
-    covered = [False] * len(text)
-    for dummy in allowed:
-        position = folded.find(dummy)
-        while position != -1:
-            covered[position : position + len(dummy)] = [True] * len(dummy)
-            position = folded.find(dummy, position + 1)
     span = range(start, end)
     if not any(covered[i] for i in span):
         return False
@@ -211,9 +216,12 @@ def scan_output(
             known_dummies | generated_dummies.get(path, frozenset())
             if generated_dummies is not None else known_dummies
         )
+        coverage: dict[int, bytearray] = {}
         for unit, detection in detections:
+            if id(unit) not in coverage:
+                coverage[id(unit)] = _dummy_coverage(unit.text, allowed)
             if _only_dummies(
-                unit.text, detection.start, detection.end, allowed, detection.kind
+                unit.text, detection.start, detection.end, coverage[id(unit)], detection.kind
             ):
                 report.recognised_dummies += 1
                 continue

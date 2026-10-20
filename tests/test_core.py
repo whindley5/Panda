@@ -160,3 +160,15 @@ class TestReportSafety:
         report = build_report("file-0001", result)
         assert report["total"] == len(result.replacements)
         assert sum(report["counts"].values()) == report["total"]
+
+
+def test_each_person_gets_a_distinct_dummy_until_the_pool_runs_out():
+    names = DummyNames()
+    latin = {names.surrogate(PIIKind.NAME, f"Person{i} Client{i}") for i in range(100)}
+    han = {names.surrogate(PIIKind.NAME, f"张{c}") for c in "伟芳娜敏静丽强磊军洋"}
+    assert len(latin) == 100
+    assert len(han) == 10 and not any(name.startswith("张") for name in han)
+    assert not names.exhausted
+    for i in range(500):
+        names.surrogate(PIIKind.NAME, f"Extra{i} Person{i}")
+    assert names.exhausted

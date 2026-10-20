@@ -96,17 +96,15 @@ def test_unsupported_file_leaves_no_output_directory(tmp_path):
     assert not (tmp_path / "output").exists()
 
 
-def test_planned_but_unbuilt_format_says_so(tmp_path, capsys):
-    """'Not built yet' and 'out of scope' are different problems for the operator."""
+def test_unsupported_format_names_supported_ones(tmp_path, capsys):
     source = tmp_path / "input"
     source.mkdir()
-    # .mp3 is planned (in PLANNED_EXTENSIONS) but has no handler yet; .pdf is now built.
     (source / "call.mp3").write_bytes(b"ID3 not really an mp3")
 
     code = main(_args(tmp_path, source))
 
     assert code == EXIT_UNSANITISED
-    assert "no handler built yet" in capsys.readouterr().err
+    assert "supported: HTML, EML, DOCX, text-layer PDF" in capsys.readouterr().err
 
 
 def _run_html(tmp_path, body):
@@ -538,6 +536,27 @@ def test_linked_subdirectory_is_refused(tmp_path, capsys, command):
     args = _args(tmp_path, source) if command == "run" else _check_args(source)
     assert main(args) == EXIT_UNSANITISED
     assert "configured recognisers found no PII" not in capsys.readouterr().out
+
+
+def test_link_above_chosen_folder_is_accepted_but_linked_root_is_not(tmp_path, capsys):
+    real = tmp_path / "real"
+    (real / "batch").mkdir(parents=True)
+    (real / "batch" / "page.html").write_text("<p>safe</p>")
+    try:
+        (tmp_path / "alias").symlink_to(real, target_is_directory=True)
+        (tmp_path / "rootlink").symlink_to(real / "batch", target_is_directory=True)
+    except OSError:
+        pytest.skip("symlink creation unavailable")
+    # Like macOS /tmp: a linked ancestor, including for the output and report paths.
+    linked = tmp_path / "alias"
+    assert main([
+        "run", str(linked / "batch"), "--output", str(linked / "out"),
+        "--report", str(linked / "rep"),
+    ]) == EXIT_OK
+    assert main(["check", "--output", str(linked / "out")]) == EXIT_OK
+    capsys.readouterr()
+    assert main(_args(tmp_path, tmp_path / "rootlink")) == EXIT_UNSANITISED
+    assert "E_LINKED" in capsys.readouterr().err
 
 
 def test_folder_command_verifies_nested_files_and_supports_repeat_runs(tmp_path, capsys):

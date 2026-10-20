@@ -152,12 +152,24 @@ def test_detector_failure_does_not_stop_verification(tmp_path):
 
 
 @pytest.mark.parametrize("failure", ["residual", "unscannable", "empty", "exception"])
-def test_final_scan_failure_retains_debug_output(tmp_path, monkeypatch, capsys, failure):
+@pytest.mark.parametrize("removal", [False, True])
+def test_final_scan_failure_retains_debug_output(
+    tmp_path, monkeypatch, capsys, failure, removal,
+):
+    """The verifying scan is the first one, or a rescan after failed files' writes go."""
     from panda.leakcheck import LeakReport
 
     source = tmp_path / "source"
     source.mkdir()
     (source / "sample.html").write_text("<p>Alice Smith</p>")
+    if removal:
+        def partial_write(path, destination, pseudonymiser, engine):
+            destination.write_text("partial")
+            raise ValueError("synthetic")
+
+        monkeypatch.setitem(formats.HANDLERS, ".broken", partial_write)
+        (source / "zz.broken").write_text("synthetic")
+    final = 2 if removal else 1
     monkeypatch.setattr(cli, "default_detector_engine", NameEngine)
     original = cli.scan_output
     calls = 0
@@ -165,7 +177,7 @@ def test_final_scan_failure_retains_debug_output(tmp_path, monkeypatch, capsys, 
     def final_failure(directory, engine, **kwargs):
         nonlocal calls
         calls += 1
-        if calls == 1:
+        if calls < final:
             return original(directory, engine, **kwargs)
         artifact = directory / "file-0001.html"
         if failure == "exception":
@@ -182,8 +194,9 @@ def test_final_scan_failure_retains_debug_output(tmp_path, monkeypatch, capsys, 
     assert cli.main([
         "run", str(source), "--opaque-names", "--output", str(output), "--report", str(reports),
     ]) == cli.EXIT_DEBUG
-    assert calls == 2
+    assert calls == final
     assert (output / "UNVERIFIED" / "file-0001.html").exists()
+    assert not (output / "UNVERIFIED" / "file-0002.broken").exists()
     report = json.loads((reports / "run.json").read_text())
     assert report["verification"]["status"] == "failed"
     assert report["batch_status"] == "unverified_debug"

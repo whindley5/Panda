@@ -64,20 +64,38 @@ FIXED_SURROGATES: dict[PIIKind, str] = {
 # it in Chinese prose keeps the sentence readable where a Latin name would jar.
 FIXED_HAN_NAME = "张三"
 
-# Dummy people for `DummyNames`. Bland full names with uncommon surnames, so a pool
-# name is unlikely to be a real client's; the Chinese list is the conventional
-# placeholder series (张三, 李四, 王五 ...). Always used whole: the rescan accepts
+# Dummy people for `DummyNames`. Bland first names with uncommon surnames, so a pool
+# name is unlikely to be a real client's; the Chinese parts give the conventional
+# placeholder series (张三, 李四, 王五 ...) first. Always used whole: the rescan accepts
 # these exact strings as intended output, and accepting a bare "Peter" would let a
 # real Peter through.
-DUMMY_NAMES = (
-    "Alan Hollis", "Susan Bramley", "Trevor Cardew", "Fiona Nettleton", "Douglas Vickers",
-    "Helen Ashdown", "Roger Renshaw", "Bridget Copeland", "Clive Thurlow", "Naomi Ellery",
-    "Stuart Bagshaw", "Paula Pilbeam", "Neil Warlow", "Vera Stanbury", "Gordon Hensley",
-    "Rita Lockyer", "Malcolm Padgett", "Cheryl Trescott", "Barry Fairhurst",
-    "Yvonne Ockenden", "Dennis Wexford", "Joyce Brightwell", "Keith Halloran",
-    "Lorna Kembrey",
+_FIRSTS = (
+    "Alan", "Susan", "Trevor", "Fiona", "Douglas", "Helen", "Roger", "Bridget", "Clive",
+    "Naomi", "Stuart", "Paula", "Neil", "Vera", "Gordon", "Rita", "Malcolm", "Cheryl",
+    "Barry", "Yvonne", "Dennis", "Joyce", "Keith", "Lorna",
 )
-DUMMY_HAN_NAMES = ("张三", "李四", "王五", "赵六", "孙七", "周八", "吴九", "郑十")
+_LASTS = (
+    "Hollis", "Bramley", "Cardew", "Nettleton", "Vickers", "Ashdown", "Renshaw",
+    "Copeland", "Thurlow", "Ellery", "Bagshaw", "Pilbeam", "Warlow", "Stanbury", "Hensley",
+    "Lockyer", "Padgett", "Trescott", "Fairhurst", "Ockenden", "Wexford", "Brightwell",
+    "Halloran", "Kembrey",
+)
+_HAN_SURNAMES = "张李王赵孙周吴郑"
+_HAN_GIVEN = "三四五六七八九十"
+
+
+def _pairs(firsts, lasts) -> list[tuple[str, str]]:
+    """Every first/last pair exactly once, cycling both so neighbours differ in each."""
+    return [
+        (firsts[i % len(firsts)], lasts[(i + i // len(firsts)) % len(lasts)])
+        for i in range(len(firsts) * len(lasts))
+    ]
+
+
+DUMMY_NAMES = tuple(f"{first} {last}" for first, last in _pairs(_FIRSTS, _LASTS))
+DUMMY_HAN_NAMES = tuple(
+    surname + given for surname, given in _pairs(_HAN_SURNAMES, _HAN_GIVEN)
+)
 ALL_FIXED_SURROGATES = frozenset(
     {*FIXED_SURROGATES.values(), FIXED_HAN_NAME, *DUMMY_NAMES, *DUMMY_HAN_NAMES}
 )
@@ -87,9 +105,9 @@ class FixedPseudonymiser:
     """Replaces every value of a kind with the same obvious dummy.
 
     Deliberately ignores the real value, so two different clients both become
-    "John Doe". That is the point in this verification phase: the output is meant to
-    read as unmistakably sanitised rather than realistic. No secret is needed because
-    nothing is derived from the input.
+    "John Doe". That is the point: the output is meant to read as unmistakably
+    sanitised rather than realistic. No secret is needed because nothing is derived
+    from the input.
     """
 
     def surrogate(self, kind: PIIKind, value: str) -> str:
@@ -105,18 +123,19 @@ _HANDLE_PART = re.compile(r"[A-Z]?[a-z]+|[A-Z]+(?![a-z])")
 class DummyNames(FixedPseudonymiser):
     """Gives each person their own dummy name; every other kind stays a fixed template.
 
-    Names are handed out from a short pool in order of first appearance and reused
-    in a cycle once it runs out, so a transcript between a client and their spouse
-    stays readable. The same person keeps the same dummy for the whole job, and a
-    fragment ("Erica", "Mr Lee") gets the dummy of the full name it belongs to when
-    that name was seen first. The assignments live in memory for one job only and
-    are never written anywhere.
+    Names are handed out from the pool in order of first appearance and reused in a
+    cycle once it runs out (`exhausted` is then set so the CLI can warn), so a
+    transcript between a client and their spouse stays readable. The same person
+    keeps the same dummy for the whole job, and a fragment ("Erica", "Mr Lee") gets
+    the dummy of the full name it belongs to when that name was seen first. The
+    assignments live in memory for one job only and are never written anywhere.
     """
 
     def __init__(self) -> None:
         self._assigned: dict[str, str] = {}
         self._by_word: dict[str, str] = {}
         self._counts = {False: 0, True: 0}
+        self.exhausted = False
 
     def surrogate(self, kind: PIIKind, value: str) -> str:
         if kind is not PIIKind.NAME:
@@ -148,6 +167,7 @@ class DummyNames(FixedPseudonymiser):
                         shared = shared or linked[0] in value
                     if not shared:
                         break
+                self.exhausted |= self._counts[han] > len(pool)
             self._assigned[key] = linked
             for word in (*words, *parts) if len(words) > 1 or parts != words else ():
                 self._by_word.setdefault(word, linked)

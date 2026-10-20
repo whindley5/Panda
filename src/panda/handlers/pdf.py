@@ -3,8 +3,8 @@
 A PDF is transcribed, not redacted in place. The output is a sanitised `.txt`, not a
 PDF. The reasoning is in AGPL terms: the one library that removes glyphs cleanly while
 preserving layout, PyMuPDF, is AGPL and rejected (`docs/DEPENDENCIES.md`), and rebuilding
-a faithful PDF would need embedded CJK fonts, a licensing and bundling problem. Will
-approved a text transcript for the whole-PDF chat histories that are in scope, so this
+a faithful PDF would need embedded CJK fonts, a licensing and bundling problem. A text
+transcript is enough for the whole-PDF chat histories that are in scope, so this
 handler extracts each page's text with pypdf, sanitises it through the shared core, and
 writes the result as text.
 

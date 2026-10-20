@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from panda.detectors import DetectorEngine
+from panda.errors import LinkedPathError
 from panda.limits import budget, check, check_text
 from panda.model import SanitiseResult
 from panda.pseudonyms import SurrogateSource
@@ -38,11 +39,6 @@ class ExtractedText:
 
 
 TextExtractor = Callable[[Path], list[ExtractedText]]
-
-# Extensions the finished tool is expected to cover. Listing them separately from
-# HANDLERS lets the CLI tell "not built yet" apart from "not something we handle",
-# which are very different messages for the person running a job.
-PLANNED_EXTENSIONS = frozenset({".eml", ".html", ".htm", ".docx", ".pdf", ".mp3"})
 
 # Populated when format handlers are loaded via register().
 HANDLERS: dict[str, Handler] = {}
@@ -73,8 +69,7 @@ def extractor_for(path: Path) -> TextExtractor | None:
 class Discovery:
     """What a scan of the input directory found.
 
-    `unsupported` covers both planned-but-unbuilt formats and formats that are out
-    of scope entirely. Both are refused, because the risk is identical.
+    `unsupported` lists every file no handler can sanitise; all are refused.
     """
 
     supported: list[Path] = field(default_factory=list)
@@ -106,7 +101,7 @@ def walk_files(directory: Path) -> list[Path]:
                 # Links can escape the selected tree or hide files from traversal.
                 # Require ordinary local entries.
                 if stat.S_ISLNK(info.st_mode):
-                    raise ValueError("linked filesystem entries are unsupported")
+                    raise LinkedPathError("linked filesystem entries are unsupported")
                 path = Path(entry.path)
                 if stat.S_ISDIR(info.st_mode):
                     visit(path, depth + 1)
@@ -149,7 +144,7 @@ def assert_regular_path(path: Path, *, directory: bool = False) -> os.stat_resul
     for component in (*reversed(absolute.parents), absolute):
         info = component.lstat()
         if stat.S_ISLNK(info.st_mode):
-            raise ValueError("linked filesystem entries are unsupported")
+            raise LinkedPathError("linked filesystem entries are unsupported")
         expected = stat.S_ISDIR if component != absolute or directory else stat.S_ISREG
         if not expected(info.st_mode):
             raise ValueError("non-regular filesystem entry")

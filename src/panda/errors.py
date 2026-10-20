@@ -18,6 +18,10 @@ class UnsupportedError(ValueError):
     pass
 
 
+class LinkedPathError(ValueError):
+    pass
+
+
 def refusal_reason(error: Exception) -> str:
     if isinstance(error, CapacityError | MemoryError | RecursionError):
         return "E_CAPACITY: resource limit exceeded; split the job or reduce document size"
@@ -38,6 +42,11 @@ def refusal_reason(error: Exception) -> str:
         return (
             "E_UNREADABLE: filesystem operation failed;"
             " check file availability and storage access"
+        )
+    if isinstance(error, LinkedPathError):
+        return (
+            "E_LINKED: a symbolic link is in the selected folder or inside it;"
+            " run on the real folder (realpath FOLDER) and replace links with real files"
         )
     if isinstance(error, ValueError | BadZipFile):
         return "E_MALFORMED: invalid or unverifiable content; export a fresh supported document"
