@@ -13,19 +13,25 @@
   <img alt="Runs offline" src="https://img.shields.io/badge/runtime-100%25%20offline-2ea44f">
   <img alt="English + 简体中文" src="https://img.shields.io/badge/languages-English%20%2B%20%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87-c2410c">
   <a href="LICENSE"><img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-blue"></a>
+  <a href="https://github.com/whindley5/panda/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/whindley5/panda/actions/workflows/ci.yml/badge.svg"></a>
 </p>
 
 <p align="center">
   <img src="docs/before-after.svg" alt="A chat transcript before and after Panda: names, date of birth, phone numbers, address, account number and email are replaced with obvious dummy values." width="780">
 </p>
 
-## Why Panda?
+## About
 
-- **Fully offline.** Panda runs on your own machine and never uploads anything. Its
-  language model is installed once with Panda, never downloaded at runtime.
-- **Built for real conversations.** It handles chat exports, email threads and KYC forms,
-  not just tidy sentences. Once Panda learns a name anywhere in a batch (a chat header, an
-  email `From:` line, a form field), it replaces that name everywhere, including in passing
+This is a personal project and will (probably) not be getting updates; during an internship I worked on custom PII tooling for client data. A while later, for an AI/ML Engineering course at UNSW, I needed to use PII tools to clean small datasets, so I 
+rewrote a simple, standalone version; used it for the class and then decided to publish it in case it's useful to anyone else :)
+
+## What it does
+
+- **Offline.** Panda runs on your own machine and never uploads anything. Its language
+  model is installed once with Panda, never downloaded at runtime.
+- **Handles messy text.** Chat exports, email threads and KYC forms, not just tidy
+  sentences. Once Panda learns a name anywhere in a batch (a chat header, an email
+  `From:` line, a form field), it replaces that name everywhere, including in passing
   mentions like "Thank you Erica~".
 - **Bilingual.** It recognises English and simplified-Chinese names and addresses
   (王女士, 老王, 我叫陈凯文), Australian and Chinese phone numbers, and checksum-validated
@@ -60,7 +66,7 @@ Panda 0.1.0 · 25 files to sanitise
 Done: all 25 files sanitised and verified.
 ```
 
-The results go into a new folder beside the source. Panda never changes or overwrites
+The results go into a new folder beside the source. Panda doesn't change or overwrite
 your source files:
 
 ```text
@@ -69,8 +75,7 @@ Batch-SANITISED/
 └── Batch-report/    run.json, one file-NNNN.json per file, report.html (with --html)
 ```
 
-Running Panda again creates `Batch-SANITISED-2`, and so on, so earlier results are never
-overwritten. The results folder is named after the source folder, so rename it before
+Running Panda again creates `Batch-SANITISED-2`, and so on. The results folder is named after the source folder, so rename it before
 handing it off if that name identifies a client.
 
 <details>
@@ -147,10 +152,30 @@ File and folder names go through the same detectors. If a name still looks ident
 after that, Panda gives it an opaque `file-NNNN` name instead. Use `--opaque-names` to give
 every output file an opaque name.
 
-## Configure it for your organisation
+### Design decisions
+
+- **Two passes over the batch.** One file often reveals a full name ("Erica Lam" in an
+  email header) while another file only says "Erica". Collecting names across the whole
+  batch first is what makes those passing mentions catchable.
+- **Don't trust a single pass.** The output is rescanned with the same detectors, and
+  anything suspicious is held back under `UNVERIFIED/` rather than published. Work happens
+  in a private staging folder and is only moved into place once it passes, after checking
+  the source hasn't changed mid-run.
+- **The audit trail can't leak.** Reports record kinds, counts, positions and detectors,
+  never an original value or file name, so the report is safe to share with the output.
+- **Certainty wins.** When layers disagree, a checksummed pattern beats a labelled field,
+  which beats a statistical NER guess.
+- **Handlers only move text.** Each format handler extracts text units and rebuilds the
+  file; it never decides what's personal. Detection lives in one place, and what each
+  handler is allowed to output is written down in [`docs/`](docs/) (MIME, HTML and
+  dependency policies).
+- **Fail closed.** Encrypted, image-only, malformed or symlinked inputs are refused with a
+  specific error rather than half-processed.
+
+## Configure it
 
 Language models often mistake brand names for people, especially brands that are also
-words or surnames. Batch-wide propagation would then erase your firm's name from every
+words or surnames. Batch-wide propagation would erase your firm's name from every
 document. Tell Panda what to keep:
 
 ```sh
@@ -227,8 +252,10 @@ put the two result trees into separate new folders.
 > **Review sanitised output before you send it to anyone else**, especially free-text
 > notes about relatives, nicknames or misspellings.
 
-These figures come from synthetic corpora of realistic chats, emails, letters and forms,
-written without reference to the detectors (all values invented; see `tests/fixtures/`):
+Measuring it against three synthetic corpora of realistic chats, emails, letters and
+forms (see `tests/fixtures/`). I tuned on the first, checked against
+a holdout, and then wrote a blind set that I didn't look at until the first run, to get a
+fair number:
 
 | Corpus | Documents | Personal values surviving | Business text wrongly removed |
 |---|---:|---:|---:|
@@ -238,9 +265,8 @@ written without reference to the detectors (all values invented; see `tests/fixt
 | **Blind, first run, untouched** | 36 | **37 / 440** | **70 / 251** |
 | Blind, after fixing the categories it exposed | 36 | 1 / 440 | 1 / 251 |
 
-The first blind run is the most honest estimate of performance on unseen material: about
-**92% of personal values caught**. Every category that run exposed was then fixed in
-general form rather than per example:
+About **92% of personal values caught**. I then fixed every category that run exposed in
+general form, rather than patching individual examples:
 
 - derived nicknames (`Raj` for Rajesh)
 - initial-and-surname aliases (`J. Park`)
@@ -249,16 +275,29 @@ general form rather than per example:
 - oddly spaced phone numbers
 
 The later blind figure is therefore optimistic. The one remaining survivor is a name that
-is also a common word (`Will Price`).
+is also a common word (`Will Price`). A test now holds the blind set at these figures, so
+a regression fails CI. 
+
+\*To note: this tool performs significantly better on *Australian* based information (ph numbers, address formats, etc). Some of the blind testing included foreign based datasets to be safe (reflected in results). 
 
 **Known gaps:**
 
-- names that are also common words
-- a misspelt name mentioned only while correcting it
-- nicknames that are neither a common short form nor the first syllable of a name found elsewhere in the batch
+- tricky names:
+	- names that are also common words
+	- a misspelt name mentioned only while correcting it
+	- nicknames that are neither a common short form nor the first syllable of a name found elsewhere in the batch
 - scanned PDFs (no OCR)
-- traditional Chinese, which isn't specifically tuned
-- languages other than English and Chinese
+- languages other than English and Simplified Chinese (clearly)
+
+
+## Development Cycle
+
+Panda began as text-only detection. I then added `.docx`, `.eml`, HTML and PDF handlers,
+followed by rounds of accuracy work against the corpora above. Using an LLM judge review of the
+repository drove a round of fixes (not stricly impacting usability); reliability, security and performance fixes: CI on Linux
+and macOS, a clearer error for symlinked paths, splitting up the main run function, a
+larger pool of dummy names, and fewer full rescans of the output. Details in
+[CHANGELOG.md](CHANGELOG.md).
 
 ## Development
 
@@ -275,16 +314,10 @@ python scripts/realistic_eval.py --fixture blind      # per-file survivor report
 Detection lives in `src/panda/detectors.py`, `spacy_recognizer.py` and `propagation.py`.
 Format handlers in `src/panda/handlers/` only extract and rebuild text. The synthetic
 corpora are written for a fictional firm, Crane Brokers (白鹤证券), whose keep terms are
-in `tests/fixtures/keep.txt`. Tests are not installed with the package.
+in `tests/fixtures/keep.txt`. Tests are not installed with the package. Fixtures are
+always invented; never real documents, not even lightly edited ones.
 
-## Contributing
-
-Issues and pull requests are welcome. **Never attach real documents or real personal
-data** to an issue, pull request or test fixture, not even lightly edited. If Panda
-misses something, write a synthetic example that shows the same pattern.
-
-If you find a leak, meaning a real kind of personal data that Panda reliably fails to
-replace, please report it with an invented example so it can be fixed in general form.
+If you find something Panda reliably misses, an issue with an invented example is welcome.
 
 ## Licence
 

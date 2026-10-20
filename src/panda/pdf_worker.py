@@ -83,7 +83,11 @@ def main() -> int:
         # worker timeout.
         limits = Limits(**json.loads(sys.argv[2]))
         maximum = limits.pdf_memory_bytes
-        resource.setrlimit(resource.RLIMIT_AS, (maximum, maximum))
+        try:
+            resource.setrlimit(resource.RLIMIT_AS, (maximum, maximum))
+        except (ValueError, OSError):
+            # macOS rejects RLIMIT_AS; the expansion limits and timeout still apply.
+            pass
         pages = extract(Path(sys.argv[1]), limits)
         sys.stdout.write(json.dumps(pages, ensure_ascii=True))
         return 0
