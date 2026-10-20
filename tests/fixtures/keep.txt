@@ -1,0 +1,7 @@
+# Organisation terms for the synthetic corpora, which are written for a fictional
+# firm. Passed to `panda run --keep-file` by scripts/realistic_eval.py.
+Crane
+Cranes
+CraneAI
+白鹤
+小鹤

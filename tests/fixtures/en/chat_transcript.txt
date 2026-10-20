@@ -1,0 +1,11 @@
+[2025-03-04 09:12] Agent: Good morning, am I speaking with Margaret Whitfield?
+[2025-03-04 09:12] Client: Yes, speaking.
+[2025-03-04 09:13] Agent: Thank you. Could you confirm your date of birth for me?
+[2025-03-04 09:13] Client: 14/07/1968.
+[2025-03-04 09:14] Agent: And the best number to reach you on?
+[2025-03-04 09:14] Client: 0412 908 771. Or email, m.whitfield@example.com.
+[2025-03-04 09:15] Agent: Is the postal address still 42 Kembla Street, Wollongong NSW 2500?
+[2025-03-04 09:15] Client: That's right.
+[2025-03-04 09:16] Agent: I have the account ending 8823 4417 under reference ACC-5540912.
+[2025-03-04 09:17] Client: My wife Susan is also on that account, on 02 4225 1180.
+[2025-03-04 09:18] Agent: Noted. Nothing further from my end.

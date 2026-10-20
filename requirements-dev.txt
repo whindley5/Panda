@@ -1,0 +1,7 @@
+# Development tools, on top of the pinned runtime lock.
+# Install with: pip install -r requirements-dev.txt -e .
+
+-r requirements.txt
+
+pytest==8.2.2
+ruff==0.5.0

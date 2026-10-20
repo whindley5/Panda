@@ -1,0 +1,459 @@
+<!doctype html>
+<!--
+  Panda visual report template. Filled in by panda/report_html.py; placeholders are
+  $$name (string.Template), so a literal dollar sign must be written as $$$$.
+  Everything is inline: the page must open from disk with no network access.
+  Text is emitted in both English (lang="en") and Simplified Chinese (lang="zh-Hans");
+  the root's data-lang decides which one is shown.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en="$title" data-zh="$title_zh">$title</title>
+<script>
+// Chosen before first paint so a Chinese reader never sees the English flash.
+(function () {
+  var lang = null;
+  try { lang = window.localStorage.getItem("panda-report-lang"); } catch (e) {}
+  if (lang !== "en" && lang !== "zh") {
+    var prefs = navigator.languages || [navigator.language || ""];
+    lang = String(prefs[0] || "").toLowerCase().indexOf("zh") === 0 ? "zh" : "en";
+  }
+  document.documentElement.setAttribute("data-lang", lang);
+  document.documentElement.setAttribute("lang", lang === "zh" ? "zh-Hans" : "en");
+})();
+</script>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #f3f5f6;
+  --surface: #ffffff;
+  --sunken: #eaeef0;
+  --ink: #16202a;
+  --ink-2: #4a5663;
+  --ink-3: #7a8591;
+  --rule: #d6dce1;
+  --rule-soft: #e6eaed;
+  --accent: #1a5fb4;
+  --bar: #1f6fd6;
+  --good: #0a7d42;
+  --good-tint: #dcf4e6;
+  --warn: #a85a00;
+  --warn-tint: #ffefd1;
+  --bad: #c81e1e;
+  --bad-tint: #fde3e0;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #10151a;
+    --surface: #161c22;
+    --sunken: #1d242b;
+    --ink: #e5eaee;
+    --ink-2: #a8b2bc;
+    --ink-3: #7b8691;
+    --rule: #2b343d;
+    --rule-soft: #222a31;
+    --accent: #74b3ff;
+    --bar: #3d8ef0;
+    --good: #34d27f;
+    --good-tint: #0e2f1f;
+    --warn: #ffb02e;
+    --warn-tint: #35260d;
+    --bad: #ff6a5c;
+    --bad-tint: #3d1411;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #10151a; --surface: #161c22; --sunken: #1d242b; --ink: #e5eaee;
+  --ink-2: #a8b2bc; --ink-3: #7b8691; --rule: #2b343d; --rule-soft: #222a31;
+  --accent: #74b3ff; --bar: #3d8ef0; --good: #34d27f; --good-tint: #0e2f1f;
+  --warn: #ffb02e; --warn-tint: #35260d; --bad: #ff6a5c; --bad-tint: #3d1411;
+}
+
+/* One language at a time. The root itself carries lang, so only descendants match. */
+:root:not([data-lang="zh"]) [lang="zh-Hans"],
+:root[data-lang="zh"] [lang="en"] { display: none; }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font: 15px/1.6 "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system,
+        "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei",
+        "Noto Sans CJK SC", sans-serif;
+  font-variant-numeric: tabular-nums;
+}
+:root[data-lang="zh"] body {
+  font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system,
+        "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC",
+        "Source Han Sans SC", sans-serif;
+  line-height: 1.75;
+}
+main { max-width: 1040px; margin: 0 auto; padding: 0 24px 72px; }
+h1, h2, h3 { margin: 0; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+code, .mono {
+  font-family: "Cascadia Mono", ui-monospace, Consolas, Menlo, monospace;
+  font-size: 12.5px;
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+
+/* Masthead */
+.masthead {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 24px;
+  flex-wrap: wrap; padding: 32px 0 18px; border-bottom: 1px solid var(--rule);
+}
+.masthead h1 { font-size: 21px; letter-spacing: -0.005em; line-height: 1.35;
+  overflow-wrap: anywhere; }
+.masthead .when { color: var(--ink-2); font-size: 14px; margin-top: 2px; }
+.lang { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px;
+  padding: 2px; background: var(--surface); flex: none; }
+.lang button {
+  font: inherit; font-size: 13px; line-height: 1.4; color: var(--ink-2);
+  background: none; border: 0; border-radius: 5px; padding: 4px 11px; cursor: pointer;
+}
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.lang button:not([aria-pressed="true"]):hover { color: var(--ink); }
+
+/* Summary: the result first, then the four numbers a reviewer checks. */
+.banner {
+  display: flex; gap: 14px; align-items: flex-start; margin: 26px 0 14px;
+  padding: 16px 20px; border: 1px solid var(--tone); border-left-width: 5px;
+  border-radius: 8px; background: var(--tint);
+}
+.banner.good { --tone: var(--good); --tint: var(--good-tint); }
+.banner.warn { --tone: var(--warn); --tint: var(--warn-tint); }
+.banner.bad  { --tone: var(--bad);  --tint: var(--bad-tint); }
+.banner .icon {
+  flex: none; width: 30px; height: 30px; display: grid; place-items: center;
+  border-radius: 50%; background: var(--tone); color: var(--surface);
+  font-size: 16px; font-weight: 700; line-height: 1; margin-top: 1px;
+}
+.banner-title { font-size: 18px; line-height: 1.35; }
+.banner.bad .banner-title { color: var(--bad); }
+.banner p { margin-top: 3px; max-width: 80ch; }
+.banner .caution { color: var(--ink-2); font-size: 13.5px; margin-top: 6px; }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.tile {
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 14px 18px 15px;
+}
+.tile .n { font-size: 30px; font-weight: 650; line-height: 1.15; letter-spacing: -0.015em; }
+.tile .l { color: var(--ink-2); font-size: 13.5px; margin-top: 3px; }
+.tile.attention { border-color: var(--warn); background: var(--warn-tint); }
+.tile.attention .n { color: var(--warn); }
+
+/* Sections */
+section.part { margin-top: 40px; }
+.part-head { display: flex; justify-content: space-between; align-items: baseline;
+  gap: 8px 20px; flex-wrap: wrap; margin-bottom: 14px; }
+.part-head h2 { font-size: 17px; }
+.note { color: var(--ink-2); font-size: 14px; max-width: 76ch; }
+.empty { color: var(--ink-3); padding: 10px 0; }
+
+.panel {
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 8px;
+  padding: 18px 20px;
+}
+.bars {
+  display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 9px 16px;
+  align-items: center; margin-bottom: 16px;
+}
+.bars .k { font-size: 14px; color: var(--ink); }
+.bar-line { display: flex; align-items: center; gap: 10px; min-width: 0; }
+/* 9ch is kept free for the count, so the longest bar never pushes it out. */
+.fill {
+  display: block; height: 22px; border-radius: 3px; background: var(--bar);
+  width: calc((100% - 9ch) * var(--w)); min-width: 4px; flex: none;
+}
+.bars .v { white-space: nowrap; font-size: 14px; }
+.bars .v b { font-weight: 650; }
+.bars .v small { color: var(--ink-3); font-size: 12.5px; margin-left: 2px; }
+
+.tallies { display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.tally { display: inline-flex; align-items: baseline; gap: 6px; font-size: 14px; }
+.tally b { font-weight: 600; }
+
+/* Tables */
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top; }
+th:first-child, td:first-child { padding-left: 0; }
+th:last-child, td:last-child { padding-right: 0; }
+thead th { color: var(--ink-3); font-weight: 500; font-size: 13px; white-space: nowrap;
+  border-bottom-color: var(--rule); }
+td.num, th.num { text-align: right; }
+.files-table { margin-top: 14px; }
+.file-cell a { color: inherit; text-decoration: none; display: inline-block; }
+.file-cell a:hover .path { color: var(--accent); text-decoration: underline; }
+.path { overflow-wrap: anywhere; font-weight: 500; }
+.path.mono { font-weight: 400; white-space: nowrap; }
+.files-table .file-cell { min-width: 16ch; }
+.more { color: var(--ink-3); font-size: 12.5px; }
+.id { display: block; color: var(--ink-3); font-size: 11.5px; white-space: nowrap; }
+.kinds { color: var(--ink-2); }
+.kc { display: inline-block; margin-right: 14px; white-space: nowrap; font-size: 13.5px; }
+.kc b { color: var(--ink); font-weight: 600; margin-left: 2px; }
+
+.status { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap;
+  font-size: 13.5px; font-weight: 500; }
+.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%;
+  background: currentColor; flex: none; }
+.status.good { color: var(--good); }
+.status.warn { color: var(--warn); }
+.status.bad { color: var(--bad); }
+.status.bad::before { border-radius: 1px; }
+
+/* Replacement ledger */
+.filters {
+  position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 8px;
+  align-items: center; padding: 10px 0; margin-bottom: 4px; background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+}
+.filters input, .filters select, .filters button {
+  font: inherit; font-size: 14px; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; line-height: 1.4;
+}
+.filters input { flex: 1 1 260px; min-width: 0; }
+.filters input::placeholder { color: var(--ink-3); }
+.filters button { cursor: pointer; color: var(--ink-2); }
+.filters button:hover { color: var(--ink); border-color: var(--ink-3); }
+.filters .shown { color: var(--ink-2); font-size: 13px; margin-left: auto; }
+
+details.file { border-bottom: 1px solid var(--rule-soft); }
+details.file > summary {
+  cursor: pointer; list-style: none; display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) auto auto; gap: 4px 18px;
+  align-items: baseline; padding: 13px 0;
+}
+details.file > summary::-webkit-details-marker { display: none; }
+details.file > summary::before {
+  content: ""; width: 6px; height: 6px; border-right: 1.5px solid var(--ink-3);
+  border-bottom: 1.5px solid var(--ink-3); transform: rotate(-45deg);
+  transition: transform 120ms ease; align-self: center;
+}
+details.file[open] > summary::before { transform: rotate(45deg); }
+details.file > summary:hover .path { color: var(--accent); }
+details.file .count { color: var(--ink-2); font-size: 13.5px; text-align: right;
+  min-width: 9ch; }
+details.file .inner { padding: 0 0 20px 32px; }
+details.file:target > summary .path { color: var(--accent); }
+
+.detections td { font-size: 13.5px; }
+.detections .idx { color: var(--ink-3); }
+.detections .loc, .detections .det-name { color: var(--ink-2); white-space: nowrap; }
+.surrogate {
+  font-family: "Cascadia Mono", ui-monospace, Consolas, Menlo, monospace; font-size: 12.5px;
+  background: var(--sunken); border-radius: 4px; padding: 1px 6px; white-space: nowrap;
+}
+.conf { white-space: nowrap; color: var(--ink-2); }
+.conf-VALIDATED { color: var(--good); }
+.conf-NER { color: var(--warn); font-weight: 600; }
+
+footer { margin-top: 60px; padding-top: 18px; border-top: 1px solid var(--rule);
+  color: var(--ink-3); font-size: 13px; display: grid; gap: 8px; }
+footer ul { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap;
+  gap: 4px 8px; }
+footer code { background: var(--sunken); border-radius: 4px; padding: 1px 6px;
+  color: var(--ink-2); }
+
+@media (max-width: 720px) {
+  main { padding: 0 16px 56px; }
+  .masthead { padding-top: 22px; }
+  .banner { padding: 14px 16px; }
+  .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tile .n { font-size: 24px; }
+  .panel { padding: 14px 14px; }
+  .bars { grid-template-columns: 1fr; gap: 2px; }
+  .bars .bar-line { margin-bottom: 8px; }
+  details.file > summary { grid-template-columns: 14px minmax(0, 1fr) auto; }
+  details.file .count { grid-column: 2 / -1; text-align: left; }
+  details.file .inner { padding-left: 0; }
+  .filters .shown { margin-left: 0; }
+  .files-table table { min-width: 560px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+@media print {
+  body { background: #fff; }
+  .lang, .filters { display: none; }
+  .banner, .tiles { break-inside: avoid; }
+  details.file { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<main>
+<header class="masthead">
+  <div>
+    <h1>$heading</h1>
+    <p class="when">$subtitle</p>
+  </div>
+  <div class="lang" role="group" aria-label="Language / 语言">
+    <button type="button" data-set-lang="en" aria-pressed="true">English</button>
+    <button type="button" data-set-lang="zh" aria-pressed="false">简体中文</button>
+  </div>
+</header>
+
+$banner
+
+<div class="tiles">$tiles</div>
+
+<section class="part" aria-labelledby="kinds-h">
+  <div class="part-head">
+    <h2 id="kinds-h"><span lang="en">What was replaced</span><span lang="zh-Hans">替换内容</span></h2>
+  </div>
+  <div class="panel">
+    $kind_chart
+    <p class="note">$review_note</p>
+  </div>
+</section>
+
+<section class="part" aria-labelledby="files-h">
+  <div class="part-head">
+    <h2 id="files-h"><span lang="en">Files</span><span lang="zh-Hans">文件</span></h2>
+    <div class="tallies">$outcome_summary</div>
+  </div>
+  <div class="panel">
+    <p class="note">$files_note</p>
+    <div class="scroll files-table">$file_table</div>
+  </div>
+</section>
+
+<section class="part" aria-labelledby="detail-h">
+  <div class="part-head">
+    <h2 id="detail-h"><span lang="en">Every replacement</span><span lang="zh-Hans">全部替换明细</span></h2>
+  </div>
+  <div class="filters" role="search">
+    <input id="q" type="search" placeholder="Search dummy value, detector or location"
+      data-placeholder-en="Search dummy value, detector or location"
+      data-placeholder-zh="搜索替换值、检测器或位置"
+      aria-label="Search replacements"
+      data-aria-en="Search replacements" data-aria-zh="搜索替换">
+    <select id="kind" aria-label="Filter by kind"
+      data-aria-en="Filter by kind" data-aria-zh="按类型筛选">$kind_options</select>
+    <select id="conf" aria-label="Filter by confidence"
+      data-aria-en="Filter by confidence" data-aria-zh="按置信度筛选">
+      <option value="" data-en="All confidence levels" data-zh="全部置信度">All confidence levels</option>
+      <option value="VALIDATED" data-en="Validated" data-zh="已校验">Validated</option>
+      <option value="PATTERN" data-en="Pattern" data-zh="规则匹配">Pattern</option>
+      <option value="NER" data-en="Model guess" data-zh="模型推测">Model guess</option>
+    </select>
+    <button type="button" id="expand"><span lang="en">Expand all</span><span lang="zh-Hans">全部展开</span></button>
+    <button type="button" id="collapse"><span lang="en">Collapse all</span><span lang="zh-Hans">全部收起</span></button>
+    <span id="shown" class="shown" aria-live="polite"></span>
+  </div>
+  $file_details
+</section>
+
+<footer>
+  <p>$footer_note</p>
+  <p>$verification_note</p>
+  <p><span lang="en">Recognisers used</span><span lang="zh-Hans">使用的识别器</span></p>
+  <ul>$recognisers</ul>
+</footer>
+</main>
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var q = document.getElementById("q");
+  var kind = document.getElementById("kind");
+  var conf = document.getElementById("conf");
+  var shown = document.getElementById("shown");
+  var rows = Array.prototype.slice.call(document.querySelectorAll("tr.det"));
+  var files = Array.prototype.slice.call(document.querySelectorAll("details.file"));
+  var when = document.querySelector("time[datetime]");
+  var moment = when ? new Date(when.getAttribute("datetime")) : null;
+
+  function lang() { return root.getAttribute("data-lang") === "zh" ? "zh" : "en"; }
+
+  function apply() {
+    var text = q.value.trim().toLowerCase();
+    var k = kind.value;
+    var c = conf.value;
+    var filtering = Boolean(text || k || c);
+    var visible = 0;
+    rows.forEach(function (row) {
+      var ok = (!k || row.getAttribute("data-kind") === k) &&
+               (!c || row.getAttribute("data-conf") === c) &&
+               (!text || row.textContent.toLowerCase().indexOf(text) !== -1);
+      row.hidden = !ok;
+      if (ok) { visible += 1; }
+    });
+    files.forEach(function (file) {
+      var any = file.querySelector("tr.det:not([hidden])") !== null;
+      var hasRows = file.querySelector("tr.det") !== null;
+      file.hidden = filtering && !any;
+      if (filtering && any) { file.open = true; }
+      var none = file.querySelector(".nomatch");
+      if (none) { none.hidden = !(hasRows && !any); }
+    });
+    if (!filtering) {
+      shown.textContent = "";
+    } else if (lang() === "zh") {
+      shown.textContent = "显示 " + visible + " / " + rows.length + " 条";
+    } else {
+      shown.textContent = visible + " of " + rows.length + " shown";
+    }
+  }
+
+  function setLang(next, remember) {
+    root.setAttribute("data-lang", next);
+    root.setAttribute("lang", next === "zh" ? "zh-Hans" : "en");
+    Array.prototype.forEach.call(document.querySelectorAll("[data-set-lang]"), function (b) {
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-set-lang") === next));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-" + next + "]"), function (el) {
+      if (el.tagName === "TITLE") { document.title = el.getAttribute("data-" + next); }
+      else { el.textContent = el.getAttribute("data-" + next); }
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-aria-" + next + "]"), function (el) {
+      el.setAttribute("aria-label", el.getAttribute("data-aria-" + next));
+    });
+    Array.prototype.forEach.call(document.querySelectorAll("[data-placeholder-" + next + "]"), function (el) {
+      el.setAttribute("placeholder", el.getAttribute("data-placeholder-" + next));
+    });
+    // Show the completion time in the reader's own time zone and language.
+    if (when && moment && !isNaN(moment.getTime())) {
+      when.textContent = moment.toLocaleString(next === "zh" ? "zh-CN" : undefined, {
+        dateStyle: "medium", timeStyle: "short"
+      });
+    }
+    if (remember) {
+      try { window.localStorage.setItem("panda-report-lang", next); } catch (e) {}
+    }
+    apply();
+  }
+
+  q.addEventListener("input", apply);
+  kind.addEventListener("change", apply);
+  conf.addEventListener("change", apply);
+  document.getElementById("expand").addEventListener("click", function () {
+    files.forEach(function (file) { file.open = true; });
+  });
+  document.getElementById("collapse").addEventListener("click", function () {
+    files.forEach(function (file) { file.open = false; });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-set-lang]"), function (b) {
+    b.addEventListener("click", function () { setLang(b.getAttribute("data-set-lang"), true); });
+  });
+  // Opening a file from the Files table should show its rows, not a closed heading.
+  function openTarget() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    var target = id && document.getElementById(id);
+    if (target && target.tagName === "DETAILS") { target.open = true; }
+  }
+  window.addEventListener("hashchange", openTarget);
+  openTarget();
+  setLang(lang(), false);
+})();
+</script>
+</body>
+</html>

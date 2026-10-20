@@ -1,0 +1,698 @@
+{
+ "alt_zh_zhoumin.eml": {
+  "format": "eml",
+  "lang": "zh",
+  "must_keep": [
+   "白鹤证券",
+   "5,000 澳元",
+   "入金"
+  ],
+  "pii": [
+   "周女士",
+   "陈晨",
+   "周敏",
+   "zhou.min88@example.org",
+   "chen.chen@example.com",
+   "021-62881234",
+   "+86 137 0000 5566",
+   "CBK-90021177"
+  ]
+ },
+ "att_docx_rohan.eml": {
+  "format": "eml",
+  "lang": "en",
+  "must_keep": [
+   "Change of details form",
+   "75 shares at $41.10 of WES.AX on 2026-05-06",
+   "Crane Support",
+   "Crane Brokers form CB-COD-1"
+  ],
+  "pii": [
+   "Rohan D'Souza",
+   "Rohan",
+   "rohan.dsouza@example.org",
+   "0417 222 333",
+   "12 December 1990",
+   "5/9 Banksia Lane, Fremantle WA 6160",
+   "CB-55009123",
+   "016-123",
+   "9988 7766",
+   "D'Souza"
+  ]
+ },
+ "att_html_grace.eml": {
+  "format": "eml",
+  "lang": "en",
+  "must_keep": [
+   "Audit Team",
+   "Senior Compliance Officer",
+   "10 shares of MSFT on 2026-01-15",
+   "CRM export"
+  ],
+  "pii": [
+   "Denise Carter",
+   "Denise",
+   "denise.carter@example.com",
+   "+61 418 300 200",
+   "Grace Okonkwo-Lee",
+   "+61 400 998 001",
+   "grace.ok@example.net",
+   "77 Station Street, Penrith NSW 2750",
+   "07.10.1985",
+   "45678912",
+   "Grace",
+   "Okonkwo-Lee"
+  ]
+ },
+ "chat_en_amir.html": {
+  "format": "html",
+  "lang": "en",
+  "must_keep": [
+   "AU-0102",
+   "15 shares at $250.00 of AAPL",
+   "2026-07-13",
+   "12:00:01"
+  ],
+  "pii": [
+   "Amir",
+   "Amir Karimi",
+   "Karimi",
+   "K A R I M I",
+   "A-M-I-R",
+   "Fourth of July 1989",
+   "0423 456 789",
+   "a.karimi@example.com",
+   "9 Cedar Way, Kew VIC 3101"
+  ]
+ },
+ "chat_en_lucy.html": {
+  "format": "html",
+  "lang": "en",
+  "must_keep": [
+   "AU-0102",
+   "250 shares at $3.45",
+   "FMG.AX",
+   "2026-04-22",
+   "11:00:05",
+   "Chat export 2026-06-02"
+  ],
+  "pii": [
+   "lucy.tran@example.net",
+   "Lucy",
+   "Lucy Thanh Tran",
+   "CBK-20458812",
+   "22 November 1992",
+   "Ms Tran",
+   "07 3555 0147",
+   "0466 700 812",
+   "Tran",
+   "18/7 Harbour Rd, Hamilton QLD 4007",
+   "Mai Tran",
+   "Mai"
+  ]
+ },
+ "chat_en_marek.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "must_keep": [
+   "AU-0233",
+   "14:02:11",
+   "40 shares of AAPL",
+   "2025-11-18",
+   "USD 189.50",
+   "Guest"
+  ],
+  "pii": [
+   "Marek Kowalski",
+   "Kowalski",
+   "K-O-W-A-L-S-K-I",
+   "Marek",
+   "Mr Kowalski",
+   "PA1234567",
+   "12345678",
+   "Mark",
+   "CB-00784521"
+  ]
+ },
+ "chat_en_priya.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "must_keep": [
+   "Crane Brokers",
+   "AU-0102",
+   "Ticket #48213",
+   "500 shares at $12.34",
+   "BHP.AX",
+   "2026-05-29",
+   "09:15:22",
+   "[agent]system",
+   "CS-2026-0611",
+   "team Compliance-AU",
+   "[AI]CraneAssist"
+  ],
+  "pii": [
+   "Priya Raman",
+   "Priya",
+   "Raman",
+   "priyaR88",
+   "14/03/1987",
+   "0412 345 678",
+   "priya.raman@example.com",
+   "Unit 7/23 Wattle Crescent, Parramatta NSW 2150",
+   "123 456 782",
+   "Arjun",
+   "+61 433 221 909",
+   "Raman, Priya",
+   "Ms Raman"
+  ]
+ },
+ "chat_en_samantha.docx": {
+  "format": "docx",
+  "lang": "en",
+  "must_keep": [
+   "AU-0102",
+   "[AI]CraneAssist",
+   "250 shares at $9.99 of ZIP.AX",
+   "2026-08-28",
+   "from the team",
+   "07:30:00"
+  ],
+  "pii": [
+   "Sam_the_trader",
+   "Samantha Reid",
+   "Samantha Hollis",
+   "Samantha",
+   "Hollis",
+   "0499 000 123",
+   "Mrs Reid",
+   "Reid",
+   "Marcus"
+  ]
+ },
+ "chat_mixed_lina.html": {
+  "format": "html",
+  "lang": "mixed",
+  "must_keep": [
+   "AU-0166",
+   "1,000 shares at $0.85",
+   "ASX:PLS",
+   "2026-04-02",
+   "Ticket 70311",
+   "19:20:45"
+  ],
+  "pii": [
+   "LiNa_Nina",
+   "Li Na",
+   "Nina",
+   "李娜",
+   "李女士",
+   "Ms Li",
+   "0488 123 456",
+   "15900001234",
+   "nina.li@example.com",
+   "E12345678",
+   "110105198807220450",
+   "22/07/1988",
+   "陈秀英",
+   "北京市朝阳区建国路88号"
+  ]
+ },
+ "chat_mixed_xiaoyu.html": {
+  "format": "html",
+  "lang": "mixed",
+  "must_keep": [
+   "[agent]system",
+   "[AI]CraneBot",
+   "AU-0102",
+   "CB-BEN-2",
+   "team will review",
+   "100 shares of 9988.HK at HK$78.30",
+   "2026-06-09",
+   "Customer verified via SMS OTP"
+  ],
+  "pii": [
+   "lin_xiaoyu",
+   "Lin Xiaoyu",
+   "林晓雨",
+   "0433 998 776",
+   "Xiaoyu",
+   "Lin",
+   "LIN Xiaoyu",
+   "Lin Dawei",
+   "13700998877",
+   "Dawei"
+  ]
+ },
+ "chat_zh_huang.docx": {
+  "format": "docx",
+  "lang": "zh",
+  "must_keep": [
+   "聊天记录",
+   "AU-0155",
+   "BABA 50 股",
+   "20:11:05"
+  ],
+  "pii": [
+   "黄海峰",
+   "黄先生",
+   "88001234",
+   "13911223344",
+   "阿峰",
+   "Huang Haifeng",
+   "haifeng.h@example.net"
+  ]
+ },
+ "chat_zh_phonehandle.html": {
+  "format": "html",
+  "lang": "zh",
+  "must_keep": [
+   "AU-0101",
+   "客服对话",
+   "08:00:00"
+  ],
+  "pii": [
+   "13987654321",
+   "吴鹏飞",
+   "Peng Fei Wu",
+   "510104199602283311",
+   "吴先生",
+   "pengfei.wu@example.org",
+   "Amy",
+   "王雅婷",
+   "028-86661234"
+  ]
+ },
+ "chat_zh_wangwei.html": {
+  "format": "html",
+  "lang": "zh",
+  "must_keep": [
+   "AU-0117",
+   "工单号：TK-88231",
+   "00700.HK",
+   "200 股",
+   "HK$385.60",
+   "[AI]CraneBot",
+   "白鹤证券",
+   "21:03:11"
+  ],
+  "pii": [
+   "wangwei_1985",
+   "王伟",
+   "王先生",
+   "310115198503161236",
+   "13812345678",
+   "wxid_wangwei85",
+   "上海市浦东新区世纪大道100号环球金融中心20楼2008室",
+   "1985年3月16日",
+   "老王",
+   "Wei Wang",
+   "李娜",
+   "+86 139 8765 4321",
+   "021-58881234"
+  ]
+ },
+ "estate_en_whitby.docx": {
+  "format": "docx",
+  "lang": "en",
+  "must_keep": [
+   "Power of attorney and estate - file summary",
+   "2026-05-30",
+   "Ticket EST-2026-15",
+   "600 shares of TLS.AX",
+   "AU-0170"
+  ],
+  "pii": [
+   "Margaret Ellen Whitby",
+   "Margaret",
+   "2 February 1941",
+   "CB-11090022",
+   "Graham Whitby",
+   "Graham",
+   "40 Elm Court, Toowoomba QLD 4350",
+   "0447 300 222",
+   "graham.whitby@example.org",
+   "Susan Whitby-Clarke",
+   "Susan",
+   "234 567 891",
+   "Whitby"
+  ]
+ },
+ "filenote_en_smith.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "must_keep": [
+   "CMP-2026-00417",
+   "2026-07-08",
+   "AU-0144",
+   "100 shares TSLA",
+   "2026-05-14"
+  ],
+  "pii": [
+   "SMITH, Jonathan Peter",
+   "Jonathan Peter",
+   "JP",
+   "Olivia Nguyen",
+   "olivia.nguyen@example.org",
+   "+61 2 9876 5432",
+   "0455 019 283",
+   "jp.smith@example.net",
+   "3-Feb-79",
+   "Apartment 1506, 3 Freshwater Place, Southbank VIC 3006",
+   "Jonno",
+   "Jonathan",
+   "Mr Smith",
+   "Olivia"
+  ]
+ },
+ "filenote_mixed_liu.docx": {
+  "format": "docx",
+  "lang": "mixed",
+  "must_keep": [
+   "File note - call back",
+   "CS-88412",
+   "AU-0102",
+   "2026-07-02 15:05",
+   "200 shares of AAPL",
+   "Crane Brokers internal"
+  ],
+  "pii": [
+   "刘洋",
+   "Liu Yang",
+   "L-I-U Y-A-N-G",
+   "Mr Liu",
+   "liuyang_sydney",
+   "刘淑芬",
+   "3 Pine Street, Chatswood NSW 2067",
+   "1990年12月1日",
+   "01/12/1990",
+   "0425 667 788",
+   "+86 152 1234 9876",
+   "03 9012 3456",
+   "liu.yang@example.net",
+   "Liu",
+   "Yang"
+  ]
+ },
+ "internal_mixed_chenyu.eml": {
+  "format": "eml",
+  "lang": "mixed",
+  "must_keep": [
+   "Customer Support Lead, Crane Brokers",
+   "2026-06-20",
+   "wire"
+  ],
+  "pii": [
+   "Marco",
+   "Marco Bianchi",
+   "marco.bianchi@example.com",
+   "Chen Yu",
+   "陈宇",
+   "chenyu_hz",
+   "+852 9123 4567",
+   "13600001111",
+   "Luca Ferrari",
+   "luca.ferrari@example.com",
+   "0431 555 100",
+   "Luca",
+   "Ferrari"
+  ]
+ },
+ "kyc_en_alrashid.docx": {
+  "format": "docx",
+  "lang": "en",
+  "must_keep": [
+   "KYC / AML periodic review",
+   "AML review - AU-0188",
+   "BUY 500 shares at $12.34 BHP.AX",
+   "2026-02-03",
+   "SELL 100 shares 00700.HK",
+   "Ticket 61008",
+   "Risk rating"
+  ],
+  "pii": [
+   "Yusuf Al-Rashid",
+   "Joe Rashid",
+   "March 3, 1983",
+   "PA7654321",
+   "Unit 22/60 Marine Parade, Cottesloe WA 6011",
+   "+61 4 1234 5678",
+   "08 9384 1122",
+   "y.alrashid@example.com",
+   "Layla Al-Rashid",
+   "306-018",
+   "00887766",
+   "Mr Al-Rashid",
+   "Layla",
+   "Yusuf",
+   "Al-Rashid"
+  ]
+ },
+ "kyc_zh_zhou.html": {
+  "format": "html",
+  "lang": "zh",
+  "must_keep": [
+   "白鹤证券",
+   "NVDA 50 股 @ $118.20",
+   "2025-12-09",
+   "AU-0129",
+   "Case 2026-0093",
+   "客户尽职调查表 (KYC)"
+  ],
+  "pii": [
+   "周建国",
+   "ZHOU Jianguo",
+   "440106197901052113",
+   "1979-01-05",
+   "+86 186 0011 2233",
+   "010-65551234",
+   "zhou.jianguo@example.net",
+   "zjg_1979",
+   "广东省广州市天河区天河路385号太古汇写字楼18层",
+   "周雨桐",
+   "6222 0212 3456 7890 123",
+   "周先生"
+  ]
+ },
+ "letter_en_papadopoulos.docx": {
+  "format": "docx",
+  "lang": "en",
+  "must_keep": [
+   "Crane Brokers Pty Ltd",
+   "800 shares at $6.75 in WDS.AX on 2026-05-08",
+   "Client Services Manager",
+   "Private and confidential"
+  ],
+  "pii": [
+   "Mr Anthony Papadopoulos",
+   "Anthony Papadopoulos",
+   "8 Hillcrest Grove",
+   "Box Hill VIC 3128",
+   "Mr Papadopoulos",
+   "0409 876 123",
+   "tony.papa@example.org",
+   "17/08/1964",
+   "Tony",
+   "Eleni Papadopoulos",
+   "(03) 9555 0192",
+   "Kim Alvarez",
+   "Papadopoulos, Anthony",
+   "Eleni",
+   "Anthony",
+   "CB-77120034"
+  ]
+ },
+ "letter_en_wilkinson.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "must_keep": [
+   "Crane Brokers",
+   "1,200 shares at $2.05 of ORG.AX",
+   "2026-01-20",
+   "Complaint 2026/113"
+  ],
+  "pii": [
+   "Mrs Dorothy Wilkinson-Hart",
+   "Dorothy Wilkinson-Hart",
+   "Wilkinson-Hart",
+   "21 Banyan Street, Alderley QLD 4051",
+   "07 3356 7788",
+   "0438 900 111",
+   "d.wilkinson.hart@example.org",
+   "1950-06-25",
+   "4400 1188",
+   "Peter Hart",
+   "Dorothy",
+   "Peter",
+   "D. Wilkinson-Hart"
+  ]
+ },
+ "letter_zh_chen.docx": {
+  "format": "docx",
+  "lang": "zh",
+  "must_keep": [
+   "白鹤证券（澳大利亚）客户通知函",
+   "2026-06-10",
+   "00700.HK 100 股",
+   "HK$372.40",
+   "客户服务部"
+  ],
+  "pii": [
+   "陈秀英",
+   "陈秀英女士",
+   "13566778899",
+   "chen.xiuying@example.org",
+   "浙江省杭州市西湖区文三路90号",
+   "330102199309110829",
+   "1993年9月11日",
+   "0571-85551234",
+   "张经理"
+  ]
+ },
+ "mixed_zhao.eml": {
+  "format": "eml",
+  "lang": "mixed",
+  "must_keep": [
+   "300 股 AAPL",
+   "Ticket 90210",
+   "Crane Support",
+   "转出股票申请"
+  ],
+  "pii": [
+   "赵磊",
+   "Ray Zhao",
+   "ray.zhao@example.net",
+   "18611112222",
+   "+61 430 555 777",
+   "Unit 5, 200 George Street, Sydney NSW 2000",
+   "032-000",
+   "123456",
+   "Ray",
+   "Zhao"
+  ]
+ },
+ "qa_transcript_sophie.eml": {
+  "format": "eml",
+  "lang": "en",
+  "must_keep": [
+   "AU-0102",
+   "200 shares of BHP.AX at $45.10",
+   "2026-06-10",
+   "QA Team",
+   "16:20:10"
+  ],
+  "pii": [
+   "sophie.b",
+   "Sophie Bernard",
+   "Sophie",
+   "CB-30045566",
+   "1 April 1995",
+   "+61 402 700 700",
+   "Bernard"
+  ]
+ },
+ "statement_en_mcallister.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "must_keep": [
+   "CRANE BROKERS PTY LTD",
+   "CBA.AX",
+   "00700.HK",
+   "2026-03-12",
+   "500 shares at $12.34",
+   "Crane Client Services",
+   "30 June 2026"
+  ],
+  "pii": [
+   "Hamish McAllister",
+   "Fiona McAllister",
+   "PO Box 4471, Sydney NSW 2001",
+   "12A/45 Oxford St, Bondi Junction NSW 2022",
+   "062-000",
+   "1234 5678",
+   "Isla McAllister",
+   "9 August 2011",
+   "0398 765 432",
+   "(02) 9876 5432",
+   "2123 45670 1",
+   "Mr McAllister",
+   "Hamish",
+   "Fiona",
+   "Isla"
+  ]
+ },
+ "subject_en_obrien.eml": {
+  "format": "eml",
+  "lang": "en",
+  "must_keep": [
+   "Crane Client Services",
+   "Account closure request"
+  ],
+  "pii": [
+   "Daniel O'Brien",
+   "daniel.obrien@example.org",
+   "dan.and.kate@example.net",
+   "Kate O'Brien",
+   "Sanjay Patel",
+   "00123456",
+   "2/14 Ocean View Rd, Manly NSW 2095",
+   "Dan",
+   "0411 222 333",
+   "Kate",
+   "Sanjay",
+   "O'Brien"
+  ]
+ },
+ "thread_en_nadia.eml": {
+  "format": "eml",
+  "lang": "en",
+  "must_keep": [
+   "Crane Brokers",
+   "300 shares of CBA.AX at $131.20",
+   "Case 2026-0451",
+   "Compliance Team",
+   "Senior Analyst"
+  ],
+  "pii": [
+   "Tom Whitlock",
+   "Tom",
+   "Nadia Haddad",
+   "Nadia",
+   "nadia.haddad@example.net",
+   "tom.whitlock@example.com",
+   "0421 876 543",
+   "5 May 1980",
+   "456 789 123",
+   "0402 111 222",
+   "Ms Haddad",
+   "Priya",
+   "Whitlock",
+   "Haddad"
+  ]
+ },
+ "webform_en_beatrice.html": {
+  "format": "html",
+  "lang": "en",
+  "must_keep": [
+   "Account application - web form submission",
+   "Crane Trade margin account",
+   "Ticket 55120",
+   "2026-02-17 08:44:10",
+   "Southern Aero Pty Ltd"
+  ],
+  "pii": [
+   "Beatrice",
+   "Fitzgerald-Ngo",
+   "1971-09-30",
+   "+61 421 555 019",
+   "bea.fitzgerald@example.org",
+   "Unit 3, 14 Jacaranda Avenue, Glenelg SA 5045",
+   "PO Box 918, Adelaide SA 5001",
+   "987 654 321",
+   "3456 78901 2",
+   "N1234567",
+   "S1234567",
+   "Bea",
+   "Ms Fitzgerald-Ngo"
+  ]
+ }
+}

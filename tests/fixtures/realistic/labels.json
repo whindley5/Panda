@@ -1,0 +1,475 @@
+{
+  "pdf_en_camelcase_mark.pdf": {
+    "format": "pdf",
+    "lang": "en",
+    "pii": [
+      "MarkT",
+      "Mark Tanner",
+      "Tanner",
+      "Mark",
+      "0412 555 019",
+      "mark.tanner77@example.com",
+      "14/03/1984",
+      "20481937",
+      "42 Wattle Crescent, Parramatta NSW 2150",
+      "MTAN-8842"
+    ],
+    "must_keep": [
+      "AU-0031",
+      "07:13:16",
+      "Please check the trade",
+      "4 May 2026",
+      "referral code from a friend",
+      "Crane team",
+      "system"
+    ]
+  },
+  "pdf_en_fullname_handle_priya.pdf": {
+    "format": "pdf",
+    "lang": "en",
+    "pii": [
+      "Priya Nair",
+      "Priya",
+      "Nair",
+      "NAIR-2026-0417",
+      "+61 430 555 218",
+      "priya.nair@example.net",
+      "9 November 1992",
+      "Unit 5/18 Corella Street, Newtown NSW 2042"
+    ],
+    "must_keep": [
+      "AU-0044",
+      "team"
+    ]
+  },
+  "pdf_en_phone_handle_sam.pdf": {
+    "format": "pdf",
+    "lang": "en",
+    "pii": [
+      "0412555019",
+      "Sam",
+      "0498 555 302",
+      "sam.holloway@example.org",
+      "Holloway",
+      "Sam Holloway",
+      "7 Ironbark Lane, Kew VIC 3101"
+    ],
+    "must_keep": [
+      "AU-0027",
+      "15/05/2026"
+    ]
+  },
+  "pdf_en_lowercase_jenny.pdf": {
+    "format": "pdf",
+    "lang": "en",
+    "pii": [
+      "jenny_wu88",
+      "Jenny Wu",
+      "Jenny",
+      "Ms Wu",
+      "22-07-1988",
+      "00913377",
+      "Jenny Lau",
+      "0421 555 764",
+      "Wu Jenny"
+    ],
+    "must_keep": [
+      "AU-0031",
+      "system"
+    ]
+  },
+  "html_en_idhandle_david.html": {
+    "format": "html",
+    "lang": "en",
+    "pii": [
+      "David Kowalski",
+      "David",
+      "Kowalski",
+      "Dave",
+      "03/12/1975",
+      "0411 555 846",
+      "dave.kowalski@example.com",
+      "3 Rosella Court, Glen Waverley VIC 3150",
+      "30177264",
+      "Dave K",
+      "8f3a91c2"
+    ],
+    "must_keep": [
+      "AU-0058"
+    ]
+  },
+  "html_en_camelcase_sarah.html": {
+    "format": "html",
+    "lang": "en",
+    "pii": [
+      "SarahJ",
+      "SJ-FR-771",
+      "Sarah",
+      "sarah.jennings@example.org",
+      "Jennings",
+      "(03) 9555 0188",
+      "1 February 1990",
+      "Sarah Jennings"
+    ],
+    "must_keep": [
+      "AU-0031",
+      "referral code from a friend",
+      "Crane team"
+    ]
+  },
+  "html_zh_meiling_wang.html": {
+    "format": "html",
+    "lang": "zh",
+    "pii": [
+      "Meiling_W",
+      "王美玲",
+      "美玲",
+      "王女士",
+      "13812345678",
+      "110105198503120020",
+      "meiling.wang@example.com",
+      "1985年3月12日"
+    ],
+    "must_keep": [
+      "AU-0112",
+      "客服",
+      "system"
+    ]
+  },
+  "html_zh_lowercase_handle_li.html": {
+    "format": "html",
+    "lang": "zh",
+    "pii": [
+      "guoqiang1979",
+      "李先生",
+      "6222 0212 3456 7890 123",
+      "李国强",
+      "国强",
+      "+86 139 8765 4321",
+      "li.guoqiang@example.net",
+      "上海市浦东新区世纪大道100号",
+      "1979年6月15日"
+    ],
+    "must_keep": [
+      "AU-0067",
+      "客服"
+    ]
+  },
+  "html_zh_mixed_kevin.html": {
+    "format": "html",
+    "lang": "zh",
+    "pii": [
+      "KevinC",
+      "Kevin",
+      "Kevin Chen",
+      "陈凯文",
+      "陈先生",
+      "0455 123 456",
+      "凯文",
+      "Unit 12, 88 Victoria Avenue, Chatswood NSW 2067",
+      "kevin.chen@example.com"
+    ],
+    "must_keep": [
+      "AU-0031",
+      "CraneAI"
+    ]
+  },
+  "html_zh_phone_handle_zhao.html": {
+    "format": "html",
+    "lang": "zh",
+    "pii": [
+      "13912345678",
+      "赵雪梅",
+      "赵女士",
+      "雪梅",
+      "310115199108240457",
+      "70312298",
+      "北京市朝阳区建国路88号3号楼1201室"
+    ],
+    "must_keep": [
+      "AU-0112"
+    ]
+  },
+  "docx_zh_chat_xiaoming.docx": {
+    "format": "docx",
+    "lang": "zh",
+    "pii": [
+      "XiaoMing_L",
+      "刘小明",
+      "0433 555 917",
+      "刘先生",
+      "xiaoming.liu@example.org",
+      "1993-11-02",
+      "小明",
+      "XM-2291"
+    ],
+    "must_keep": [
+      "AU-0067",
+      "referral code from a friend"
+    ]
+  },
+  "docx_en_chat_tom.docx": {
+    "format": "docx",
+    "lang": "en",
+    "pii": [
+      "Tom Ridley",
+      "Tom",
+      "40518826",
+      "Mr Ridley",
+      "07 3555 0129"
+    ],
+    "must_keep": [
+      "AU-0044",
+      "06:41:09",
+      "Please keep the receipt."
+    ]
+  },
+  "docx_en_memo_amelia.docx": {
+    "format": "docx",
+    "lang": "en",
+    "pii": [
+      "Amelia Foster",
+      "amelia.foster@example.com",
+      "0402 555 613",
+      "Amelia",
+      "Foster",
+      "28/09/1987",
+      "Ms Foster"
+    ],
+    "must_keep": [
+      "Crane",
+      "AU-0031",
+      "team",
+      "2 May 2026",
+      "15 June 2026"
+    ]
+  },
+  "docx_en_letter_rahman.docx": {
+    "format": "docx",
+    "lang": "en",
+    "pii": [
+      "Mohammed Rahman",
+      "Mr Rahman",
+      "17 Banksia Road, Box Hill VIC 3128",
+      "Mohammed",
+      "Rahman",
+      "0411 555 774",
+      "Moe"
+    ],
+    "must_keep": [
+      "Crane",
+      "team",
+      "12 May 2026"
+    ]
+  },
+  "docx_en_filenote_grech.docx": {
+    "format": "docx",
+    "lang": "en",
+    "pii": [
+      "Fiona Grech",
+      "Ms Grech",
+      "Fiona",
+      "Grech",
+      "fgrech@example.net",
+      "0419 555 302",
+      "1 April 1979",
+      "062-000",
+      "12345678"
+    ],
+    "must_keep": [
+      "AU-0058",
+      "system",
+      "Crane",
+      "4 May 2026"
+    ]
+  },
+  "docx_zh_letter_sun.docx": {
+    "format": "docx",
+    "lang": "zh",
+    "pii": [
+      "孙晓燕",
+      "孙女士",
+      "晓燕",
+      "440106198807200380",
+      "13566778899",
+      "北京市海淀区中关村大街27号5单元802室",
+      "sun.xiaoyan@example.org"
+    ],
+    "must_keep": [
+      "客服",
+      "AU-0112",
+      "Crane"
+    ]
+  },
+  "eml_en_thread_olivia.eml": {
+    "format": "eml",
+    "lang": "en",
+    "pii": [
+      "Olivia Bennett",
+      "olivia.bennett@example.com",
+      "Harold Nguyen",
+      "harold.nguyen@example.net",
+      "Grace Liu",
+      "grace.liu@example.com",
+      "Olivia",
+      "Harold",
+      "+61 412 555 730",
+      "Bennett",
+      "Nguyen"
+    ],
+    "must_keep": [
+      "Crane",
+      "team",
+      "3 May 2026",
+      "AU-0031"
+    ]
+  },
+  "eml_en_html_alt_okafor.eml": {
+    "format": "eml",
+    "lang": "en",
+    "pii": [
+      "Samuel Okafor",
+      "samuel.okafor@example.org",
+      "Priscilla Tan",
+      "priscilla.tan@example.net",
+      "Dr Okafor",
+      "Samuel",
+      "(02) 9555 0143",
+      "Priscilla"
+    ],
+    "must_keep": [
+      "Crane",
+      "Client Services"
+    ]
+  },
+  "eml_en_surname_first_wu.eml": {
+    "format": "eml",
+    "lang": "en",
+    "pii": [
+      "Wu, Jenny",
+      "jenny.wu@example.org",
+      "Jenny",
+      "Ms Wu",
+      "Peter Adeyemi",
+      "peter.adeyemi@example.com",
+      "Peter",
+      "0421 555 764"
+    ],
+    "must_keep": [
+      "AU-0031",
+      "system",
+      "team"
+    ]
+  },
+  "eml_en_forwarded_chat_ridley.eml": {
+    "format": "eml",
+    "lang": "en",
+    "pii": [
+      "Tom Ridley",
+      "tom.ridley@example.org",
+      "Tom",
+      "DOB: 05/07/1991",
+      "5 July 1991",
+      "Ridley",
+      "Rachel Zhou",
+      "rachel.zhou@example.com",
+      "Rachel",
+      "MarkT"
+    ],
+    "must_keep": [
+      "AU-0044",
+      "Crane",
+      "system"
+    ]
+  },
+  "eml_zh_wang_jianguo.eml": {
+    "format": "eml",
+    "lang": "zh",
+    "pii": [
+      "王建国",
+      "wang.jianguo@example.com",
+      "建国",
+      "王先生",
+      "510104197204180115",
+      "13711223344",
+      "成都市锦江区红星路三段99号",
+      "李婷",
+      "li.ting@example.net"
+    ],
+    "must_keep": [
+      "客服",
+      "AU-0067"
+    ]
+  },
+  "eml_zh_html_alt_zhang.eml": {
+    "format": "eml",
+    "lang": "zh",
+    "pii": [
+      "张丽华",
+      "zhang.lihua@example.org",
+      "张女士",
+      "丽华",
+      "13712340987",
+      "+86 137 1234 0987",
+      "陈志远",
+      "chen.zhiyuan@example.com",
+      "志远"
+    ],
+    "must_keep": [
+      "客服"
+    ]
+  },
+  "eml_en_signature_lastname_only.eml": {
+    "format": "eml",
+    "lang": "en",
+    "pii": [
+      "Beatrice Castellano",
+      "b.castellano@example.com",
+      "Castellano",
+      "Beatrice",
+      "0392 555 017",
+      "Nathan Pike",
+      "nathan.pike@example.org",
+      "Pike",
+      "Nathan"
+    ],
+    "must_keep": [
+      "Crane",
+      "AU-0058",
+      "team"
+    ]
+  },
+  "html_email_en_lucas.html": {
+    "format": "html",
+    "lang": "en",
+    "pii": [
+      "Lucas Ferreira",
+      "lucas.ferreira@example.com",
+      "0417 555 660",
+      "9 Jacaranda Drive, Toowong QLD 4066",
+      "Ferreira",
+      "Lucas"
+    ],
+    "must_keep": [
+      "AU-0027",
+      "20 May 2026",
+      "team"
+    ]
+  },
+  "html_email_zh_zhou.html": {
+    "format": "html",
+    "lang": "zh",
+    "pii": [
+      "周文博",
+      "zhou.wenbo@example.net",
+      "15012345678",
+      "周先生",
+      "55023819",
+      "文博",
+      "1990年12月1日"
+    ],
+    "must_keep": [
+      "客服"
+    ]
+  }
+}

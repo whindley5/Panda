@@ -1,0 +1,981 @@
+{
+ "doc01_chat_en.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "pii": [
+   "kenji_trades88",
+   "Kenji Watanabe-Smith",
+   "Kenji",
+   "14/02/1987",
+   "CB-20458817",
+   "062-141",
+   "4471 8820",
+   "733-021",
+   "10099347",
+   "kenji.ws@example.com",
+   "0412 908 331"
+  ],
+  "must_keep": [
+   "Crane Brokers",
+   "AU-0210",
+   "AU-0117",
+   "WD-55127",
+   "AUD 4,250.00",
+   "TKT-774102",
+   "AAPL",
+   "187.42",
+   "50 AAPL",
+   "Crane Trader",
+   "2026-08-03 14:22:10",
+   "CraneAssist",
+   "T+1",
+   "USD 0.99"
+  ]
+ },
+ "doc02_chat_timeonly_en.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "pii": [
+   "Dimitrios Papadakis",
+   "Jim",
+   "Mr Papadakis",
+   "N4482019",
+   "9 November 1961",
+   "Eleni Papadaki",
+   "+61 3 9555 0142",
+   "0387 5521",
+   "jim.papadakis@example.net"
+  ],
+  "must_keep": [
+   "Crane Brokers",
+   "AU-0342",
+   "200 BHP",
+   "44.10",
+   "09:58",
+   "ORD-903311",
+   "PayID",
+   "10:02:11"
+  ]
+ },
+ "doc03_statement_letter_en.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "pii": [
+   "Sarah-Jane Whitcombe",
+   "Ms Sarah-Jane Whitcombe",
+   "Unit 4/17 Marrickville Road",
+   "Marrickville NSW 2204",
+   "SJ",
+   "7730-1194-SJW",
+   "812 345 677",
+   "51 824 753 556",
+   "012-003",
+   "3391 0287",
+   "4532 0152 9630 7413",
+   "sj.whitcombe@example.org",
+   "02 9550 7718",
+   "22-Jan-1974",
+   "Marcus Oyelaran-Hughes"
+  ],
+  "must_keep": [
+   "CRANE BROKERS (AUSTRALIA)",
+   "NVDA",
+   "TSLA",
+   "CBA",
+   "121.80",
+   "248.15",
+   "152.60",
+   "2026-07-03",
+   "STM-2026-07-88120",
+   "Client Services"
+  ]
+ },
+ "doc04_complaint_letter_en.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "pii": [
+   "Mr Rajesh Venkataraman",
+   "Rajesh Venkataraman",
+   "PO Box 1187",
+   "Parramatta NSW 2124",
+   "CB-30981245",
+   "2953 66481 2",
+   "R. Venkataraman",
+   "Priya",
+   "0433 216 090",
+   "04/07/1969",
+   "PA3319075",
+   "rajesh.v@example.com",
+   "Raj"
+  ],
+  "must_keep": [
+   "Crane Brokers",
+   "TKT-781266",
+   "120 shares of WOW",
+   "34.20",
+   "33.05",
+   "RG 271",
+   "Complaints Officer"
+  ]
+ },
+ "doc05_aml_review_note_en.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "pii": [
+   "Fatima Al-Mansour",
+   "F. Almansour",
+   "Fatema Al Mansoor",
+   "12 Wattle Grove Rd, Kangaroo Valley NSW 2577",
+   "Yusuf Al-Mansour",
+   "+971 50 123 4567",
+   "0455 700 123",
+   "Fati",
+   "fatima_dds",
+   "N9027613",
+   "12 998 220",
+   "30 June 1980",
+   "GB51 EXMP 4020 1177 3305 62"
+  ],
+  "must_keep": [
+   "CRANE BROKERS",
+   "AML-2026-0419",
+   "CO-07",
+   "AUD 48,500",
+   "Crane Trader",
+   "ASX options",
+   "2026-08-09",
+   "Enhanced monitoring"
+  ]
+ },
+ "doc06_chat_system_speakers_en.pdf": {
+  "format": "pdf",
+  "lang": "en",
+  "pii": [
+   "@aroha.terangi",
+   "Aroha Te Rangi",
+   "Aroha",
+   "A5521098",
+   "1234567",
+   "+64 21 555 0199",
+   "049-091-850",
+   "14 Tui Street Ponsonby Auckland 1011"
+  ],
+  "must_keep": [
+   "Crane Brokers",
+   "AU-0451",
+   "TKT-790015",
+   "TRF-2",
+   "CraneAssist",
+   "Sharesies",
+   "2026-09-01 08:14:40"
+  ]
+ },
+ "doc07_webform_en.html": {
+  "format": "html",
+  "lang": "en",
+  "pii": [
+   "Tran Minh Quan",
+   "Quan",
+   "quan.tran@example.com",
+   "(04) 0871 2255",
+   "March 3rd, 1979",
+   "Lot 12, Old Coach Road, Yandina QLD 4561",
+   "73 119 004 852",
+   "Ms Bui Thu Ha",
+   "thuha@example.net",
+   "Quan Tran Family Trust"
+  ],
+  "must_keep": [
+   "Crane Brokers",
+   "ENQ-66120",
+   "Crane Trader",
+   "500 shares of ANZ",
+   "AU-0288",
+   "company account"
+  ]
+ },
+ "doc08_crm_notes_en.html": {
+  "format": "html",
+  "lang": "en",
+  "pii": [
+   "Vanessa Lo-Brennan",
+   "VLB",
+   "1990-05-27",
+   "v.lobrennan@example.org",
+   "Declan Brennan",
+   "0488 341 906",
+   "0419 200 774",
+   "vanlo_88",
+   "88213640",
+   "Ms Lo-Brennan",
+   "3/88 Bridge Road, Richmond VIC 3121",
+   "0945 1237",
+   "456 789 123",
+   "20913377"
+  ],
+  "must_keep": [
+   "AU-0199",
+   "AU-0230",
+   "AU-0141",
+   "VAS",
+   "AUD 9.90",
+   "ORD-11902",
+   "75 VAS @ 98.34",
+   "TKT-770233",
+   "2026-07-02 11:05",
+   "dividend"
+  ]
+ },
+ "doc09_crm_notes_zh.html": {
+  "format": "html",
+  "lang": "zh",
+  "pii": [
+   "陈雅婷",
+   "Tina Chen",
+   "Chen Yating",
+   "陈女士",
+   "tina_cyt2020",
+   "+86 138 0013 8000",
+   "440305199207180047",
+   "E12345678",
+   "1992年7月18日",
+   "6222 0245 0100 3345 678",
+   "广东省深圳市南山区科技园南路18号阳光大厦12楼1208室",
+   "518057",
+   "Tina",
+   "林志远"
+  ],
+  "must_keep": [
+   "AU-0355",
+   "AU-0102",
+   "AUD 12,000",
+   "TKT-795501",
+   "白鹤证券",
+   "Crane Trader",
+   "美股账户",
+   "入金"
+  ]
+ },
+ "doc10_chat_mixed.html": {
+  "format": "html",
+  "lang": "mixed",
+  "pii": [
+   "wangjg_1968",
+   "王建国",
+   "Jack Wang",
+   "王先生",
+   "老王",
+   "CB-88140276",
+   "0421 667 305",
+   "jackwang_syd",
+   "Mei Wang",
+   "mei.wang@example.com"
+  ],
+  "must_keep": [
+   "AU-0266",
+   "CraneAssist",
+   "100 股 AAPL",
+   "白鹤证券",
+   "ORD-441209",
+   "USD 201.55",
+   "T+1",
+   "2026-08-20 20:31:05"
+  ]
+ },
+ "doc11_webform_zh.html": {
+  "format": "html",
+  "lang": "zh",
+  "pii": [
+   "张伟",
+   "Wei Zhang",
+   "David",
+   "139-1010-6677",
+   "wxid_zw_2231",
+   "zhangwei.sz@example.net",
+   "1978/11/02",
+   "G28801932",
+   "上海市浦东新区世纪大道100号环球金融中心45层",
+   "张律师",
+   "Cheung Wing-kit",
+   "wk.cheung@example.org"
+  ],
+  "must_keep": [
+   "白鹤证券",
+   "港股通",
+   "美股期权",
+   "700.HK",
+   "2000 股",
+   "2026-09-02 13:05",
+   "开户咨询表"
+  ]
+ },
+ "doc12_ticket_export_hk.html": {
+  "format": "html",
+  "lang": "mixed",
+  "pii": [
+   "Chan Siu Ming",
+   "Simon",
+   "陈小明",
+   "K123456(7)",
+   "Y812345(2)",
+   "+852 9123 4567",
+   "+852 2810 3344",
+   "simon.chan@example.com",
+   "Flat 5B, Block 3, Kwun Tong Garden, 88 Hoi Yuen Road, Kwun Tong, Kowloon, Hong Kong",
+   "KJ0294517",
+   "8 Feb 1983",
+   "Mr Chan",
+   "Winnie Lam's",
+   "winnie.lam@example.net",
+   "Ms Lam",
+   "Winnie Lam"
+  ],
+  "must_keep": [
+   "TKT-802214",
+   "AU-0387",
+   "HKD 150,000",
+   "HSBC-FT-99120",
+   "Crane AU",
+   "treasury team",
+   "Withdrawal delay"
+  ]
+ },
+ "doc13_crm_deceased_en.html": {
+  "format": "html",
+  "lang": "en",
+  "pii": [
+   "Ngozi Adeyemi-Clarke",
+   "Emmanuel Adeyemi",
+   "12/12/1948",
+   "0466 902 118",
+   "ngozi.ac@example.com",
+   "Bernadette Kowalczyk",
+   "Kowalczyk & Reid Legal",
+   "9 Queen St, Brisbane City QLD 4000",
+   "(07) 3555 0100",
+   "Ms Adeyemi-Clarke",
+   "Ngozi",
+   "61120983"
+  ],
+  "must_keep": [
+   "AU-0222",
+   "AU-0311",
+   "300 shares FMG",
+   "1,200 shares of TLS",
+   "TKT-806651",
+   "grant of probate",
+   "Account restricted"
+  ]
+ },
+ "doc14_webform_wordnames_en.html": {
+  "format": "html",
+  "lang": "en",
+  "pii": [
+   "Grace Lamb",
+   "grace.lamb@example.org",
+   "+61 (0)412 555 321",
+   "Will Price",
+   "Mark Jones",
+   "May Lim",
+   "22 Hope St, Bull Creek WA 6149",
+   "123 456 782",
+   "1/9/85"
+  ],
+  "must_keep": [
+   "Crane",
+   "40 units of VGS",
+   "2026-09-05",
+   "1300 000 000",
+   "Feedback and complaints",
+   "Sydney desk"
+  ]
+ },
+ "doc15_escalation_quoted_en.eml": {
+  "format": "eml",
+  "lang": "en",
+  "pii": [
+   "Mr Kowalski",
+   "Agnieszka Nowak-Kowalska",
+   "agnieszka.nk@example.net",
+   "4123 45670 1",
+   "06731254",
+   "987 654 321",
+   "Tomasz Kowalski",
+   "tomasz.kowalski@example.com",
+   "CB-52007731",
+   "0402 118 664",
+   "Tom",
+   "Tomasz \"Tom\" Kowalski",
+   "7 Banksia Ct, Toowong QLD 4066",
+   "21.03.1972"
+  ],
+  "must_keep": [
+   "TKT-771908",
+   "ORD-70021",
+   "300 SOL",
+   "8.72",
+   "10:14:33",
+   "AU-0288",
+   "Crane Brokers",
+   "AFCA",
+   "Compliance"
+  ]
+ },
+ "doc16_forwarded_chat_mixed.eml": {
+  "format": "eml",
+  "lang": "mixed",
+  "pii": [
+   "lily_zhou_sydney",
+   "周国强",
+   "Lily Zhou",
+   "周丽丽",
+   "Zhou Guoqiang",
+   "1955-04-09",
+   "Mr Zhou",
+   "CB-40219966",
+   "0433 771 208",
+   "g.zhou@example.net"
+  ],
+  "must_keep": [
+   "AU-0120",
+   "1800 555 019",
+   "2026-08-11 19:02:11",
+   "Compliance"
+  ]
+ },
+ "doc17_accountant_docx_attach.eml": {
+  "format": "eml",
+  "lang": "en",
+  "pii": [
+   "Ms Luo Xiaoyu",
+   "Luo Xiaoyu",
+   "罗晓雨",
+   "51010719880225013X",
+   "EA9922017",
+   "Room 1502, Building 7, Jinjiang District, Chengdu, Sichuan 610021",
+   "JP 145522",
+   "Andrew Cheung",
+   "22 604 883 175",
+   "0413 002 918",
+   "andrew@example.org",
+   "+86 186 0028 1102",
+   "xiaoyu_luo88"
+  ],
+  "must_keep": [
+   "Crane Onboarding",
+   "Crane Trader",
+   "AP-90211",
+   "Certified ID summary",
+   "CPA"
+  ]
+ },
+ "doc18_html_attach_en.eml": {
+  "format": "eml",
+  "lang": "en",
+  "pii": [
+   "Olumide Balogun",
+   "Ola",
+   "0477 250 981",
+   "ola.balogun@example.net",
+   "CB-61099120",
+   "18 Cassia Way, Baulkham Hills NSW 2153",
+   "15 March 1985"
+  ],
+  "must_keep": [
+   "AU-0090",
+   "AU-0173",
+   "25 shares of MSFT",
+   "415.30",
+   "Call review"
+  ]
+ },
+ "doc19_complaint_zh.eml": {
+  "format": "eml",
+  "lang": "zh",
+  "pii": [
+   "黄美玲",
+   "CB-70334518",
+   "110105197908060228",
+   "138-2200-4519",
+   "meiling_h777",
+   "meiling.huang@example.com",
+   "北京市朝阳区建国路88号SOHO现代城B座2206",
+   "黄女士",
+   "Huang Meiling"
+  ],
+  "must_keep": [
+   "白鹤证券",
+   "500 股 9988.HK",
+   "HKD 96.40",
+   "2026年8月28日",
+   "资金未到账"
+  ]
+ },
+ "doc20_legal_letter_en.eml": {
+  "format": "eml",
+  "lang": "en",
+  "pii": [
+   "Tony",
+   "Mr Vassiliadis",
+   "3 May 1966",
+   "Melissa Kwan",
+   "(02) 8555 0177",
+   "melissa.kwan@example.org",
+   "5/9 Beach Rd, Bondi NSW 2026",
+   "CB-15003948",
+   "0400 731 220",
+   "Tony V",
+   "tony.v@example.net",
+   "Anthony",
+   "Vassiliadis"
+  ],
+  "must_keep": [
+   "Crane Brokers",
+   "ORD-88123",
+   "MK:2026:0341",
+   "Preservation notice",
+   "Senior Associate"
+  ]
+ },
+ "doc21_adviser_authority_en.eml": {
+  "format": "eml",
+  "lang": "en",
+  "pii": [
+   "Hyun-woo Baek",
+   "Baek Hyun-woo",
+   "J. Park",
+   "1983-10-19",
+   "0450 663 917",
+   "hwbaek83",
+   "hw.baek@example.com",
+   "Deborah Achterberg",
+   "d.achterberg@example.org",
+   "998812",
+   "0 2 9555 0184",
+   "CB-33091277"
+  ],
+  "must_keep": [
+   "Crane",
+   "Client Services",
+   "AFSL 401234",
+   "Adviser authority"
+  ]
+ },
+ "doc22_mixed_phone_change.eml": {
+  "format": "eml",
+  "lang": "mixed",
+  "pii": [
+   "Kevin",
+   "林凯文",
+   "0411 552 907",
+   "+61 487 210 395",
+   "Sophie Tan",
+   "kevin.lin@example.com",
+   "kevin_lin_0720",
+   "20/07/1991",
+   "PE4471820",
+   "CB-99120451",
+   "凯文"
+  ],
+  "must_keep": [
+   "1000 shares of 00700",
+   "2026-09-14",
+   "更改手机号",
+   "Change phone number"
+  ]
+ },
+ "doc23_poa_family_en.eml": {
+  "format": "eml",
+  "lang": "en",
+  "pii": [
+   "Chrysoula Andreadis",
+   "CB-24119045",
+   "Nikolaos Andreadis",
+   "17 April 1957",
+   "611 222 903",
+   "AN4021167",
+   "+30 691 234 5678",
+   "0424 556 011",
+   "Rural Mail Box 214, Mount Barker SA 5251",
+   "Chrysoula",
+   "(08) 8391 0022",
+   "Efthymia Andreadis",
+   "Effie",
+   "effie.andreadis@example.net",
+   "nick.andreadis@example.net"
+  ],
+  "must_keep": [
+   "Crane",
+   "Power of Attorney"
+  ]
+ },
+ "doc24_compliance_zh.eml": {
+  "format": "eml",
+  "lang": "zh",
+  "pii": [
+   "郑海燕",
+   "Zheng Haiyan",
+   "Helen",
+   "CB-81902275",
+   "330106196912300450",
+   "R550123(6)",
+   "+852 6234 8890",
+   "+86 159 8800 3321",
+   "香港九龙尖沙咀弥敦道100号 1503室",
+   "1969年12月30日",
+   "郑女士"
+  ],
+  "must_keep": [
+   "白鹤证券",
+   "AML-2026-0512",
+   "CO-03",
+   "2026-09-11",
+   "HKD 1,200,000"
+  ]
+ },
+ "doc25_kyc_form_en.docx": {
+  "format": "docx",
+  "lang": "en",
+  "pii": [
+   "Mr Thanh Dat",
+   "Danny",
+   "07 / 11 / 1990",
+   "Unit 9, 44 Hamilton Rd, Fairfield NSW 2165",
+   "PO Box 302, Cabramatta NSW 2166",
+   "0421 300 588",
+   "danny.le@example.com",
+   "234 567 891",
+   "20387711",
+   "PB0192283",
+   "032-001",
+   "445 908",
+   "44 129 750 311",
+   "Thanh Dat Le",
+   "Le Thanh Dat"
+  ],
+  "must_keep": [
+   "Crane Brokers",
+   "AP-91032",
+   "Crane Trader",
+   "US equities",
+   "AU-0155",
+   "Individual Account Application",
+   "Fairfield Plumbing Supplies",
+   "2026-08-30"
+  ]
+ },
+ "doc26_beneficiary_nomination_en.docx": {
+  "format": "docx",
+  "lang": "en",
+  "pii": [
+   "CB-50127384",
+   "Bronwyn Ellery-Ashcroft",
+   "4 December 1958",
+   "Callum Ashcroft",
+   "0417 998 202",
+   "callum.a@example.net",
+   "Isla Ashcroft-Reyes",
+   "19/08/2014",
+   "Nam Sook Kang",
+   "nsk1949@example.org",
+   "3 Lorikeet Ave, Robina QLD 4226",
+   "Bronwyn",
+   "Bron",
+   "0409 114 780",
+   "Dr Anil Sharma",
+   "JP 220481"
+  ],
+  "must_keep": [
+   "Beneficiary Nomination Form",
+   "NOM-01 v3",
+   "Crane Brokers",
+   "50%",
+   "25%",
+   "Son",
+   "Friend / carer"
+  ]
+ },
+ "doc27_hardship_note_en.docx": {
+  "format": "docx",
+  "lang": "en",
+  "pii": [
+   "Ms Bui Kim Ngan",
+   "Kim",
+   "0432 118 007",
+   "Ravi Chandrasekhar",
+   "28 February 1976",
+   "CB-19022084",
+   "kim.bui@example.com",
+   "Ms Talia Moore",
+   "(03) 9555 0333",
+   "6/210 Sydney Road, Brunswick VIC 3056",
+   "123 456 789A",
+   "Tuyet Bui"
+  ],
+  "must_keep": [
+   "HS-2026-118",
+   "AU-0400",
+   "AUD 2,300",
+   "Crane Trader",
+   "60 shares of QAN",
+   "margin call",
+   "Southern Cross Freight",
+   "Hardship team",
+   "2026-09-08"
+  ]
+ },
+ "doc28_deceased_estate_en.docx": {
+  "format": "docx",
+  "lang": "en",
+  "pii": [
+   "Harold Ignatius Fenwick",
+   "3rd of June 1939",
+   "CB-11987345",
+   "Doris Fenwick",
+   "Lachlan Fenwick",
+   "41 Ironbark Drive, Kiama NSW 2533",
+   "0412 776 340",
+   "l.fenwick@example.org",
+   "Nasrin Haddad",
+   "GPO Box 1442 Sydney NSW 2001",
+   "Lachlan",
+   "Harry",
+   "Doris"
+  ],
+  "must_keep": [
+   "Deceased Estate Notification",
+   "2026-08-16",
+   "1,500 shares of TLS",
+   "AUD 18,442.10",
+   "AU-0331",
+   "Estates team"
+  ]
+ },
+ "doc29_客户资料确认书_zh.docx": {
+  "format": "docx",
+  "lang": "zh",
+  "pii": [
+   "赵明轩",
+   "Ming Xuan Zhao",
+   "Marcus",
+   "110108198305210163",
+   "1983年5月21日",
+   "+86 135 2210 6789",
+   "marcus.zhao@example.com",
+   "zmx_marcus83",
+   "北京市海淀区中关村大街27号中关村大厦9层903室，100080",
+   "6214 8300 1188 7745",
+   "CB-66120384",
+   "赵敏",
+   "138 0011 2233",
+   "赵先生"
+  ],
+  "must_keep": [
+   "白鹤证券",
+   "Crane Brokers",
+   "客户资料确认书",
+   "TKT-810004",
+   "AU-0410",
+   "美股、港股、期权",
+   "2026年9月20日",
+   "招商银行"
+  ]
+ },
+ "doc30_chat_transcript_en.docx": {
+  "format": "docx",
+  "lang": "en",
+  "pii": [
+   "the_real_hamish",
+   "Hamish MacLeod",
+   "Hamish",
+   "11 Aug 1972",
+   "0498 771 322",
+   "Mr MacLeod",
+   "Ines Ferreira-Duarte",
+   "ines@example.net",
+   "07 3555 0163",
+   "5590 2213 8847"
+  ],
+  "must_keep": [
+   "Crane Brokers",
+   "AU-0088",
+   "300 GOLD",
+   "4.15",
+   "4.11",
+   "09:31:05",
+   "ORD-220918",
+   "TKT-820771",
+   "CraneAssist"
+  ]
+ },
+ "doc31_中文聊天记录.docx": {
+  "format": "docx",
+  "lang": "zh",
+  "pii": [
+   "lisa_cn_1990",
+   "李思雨",
+   "李女士",
+   "CB-43021998",
+   "Lisa Li",
+   "lisa_siyu90",
+   "2280913377",
+   "思雨",
+   "330106199003150620",
+   "187 0123 4567",
+   "杭州市西湖区文三路90号东部软件园"
+  ],
+  "must_keep": [
+   "AU-0501",
+   "CraneAssist",
+   "HKD",
+   "TKT-821330",
+   "在线客服聊天记录",
+   "2026-09-16 21:14:02",
+   "入金"
+  ]
+ },
+ "doc32_compliance_case_mixed.docx": {
+  "format": "docx",
+  "lang": "mixed",
+  "pii": [
+   "Xu Jiayi",
+   "徐佳怡",
+   "Jojo",
+   "CB-92014476",
+   "0129-880-45",
+   "320102198701090889",
+   "C301234(2)",
+   "E88213047",
+   "+61 430 118 222",
+   "+86 138 1234 8899",
+   "+852 5566 3300",
+   "jojo.xu@example.com",
+   "xujiayi88@example.net",
+   "1/30 Elizabeth St, Sydney NSW 2000",
+   "江苏省南京市玄武区中山路1号",
+   "徐女士",
+   "Alan Xu",
+   "徐志强",
+   "1985/03/19"
+  ],
+  "must_keep": [
+   "Compliance Case CC-2026-233",
+   "AU-0270",
+   "CO-11",
+   "100 shares of BABA",
+   "60 NIO",
+   "USD 118.20",
+   "USD 5.02",
+   "2026-09-03 03:14",
+   "Crane Brokers",
+   "2FA"
+  ]
+ },
+ "doc33_smsf_trustee_form_en.docx": {
+  "format": "docx",
+  "lang": "en",
+  "pii": [
+   "84 507 331 902",
+   "Duc Pham",
+   "David Pham",
+   "1966-06-06",
+   "Hanh Pham nee Vu",
+   "12 January 1968",
+   "376 112 908",
+   "484-799",
+   "2233 4455",
+   "duc.pham@example.com",
+   "0411 909 877",
+   "Lot 3 Nowra Rd, Worrigee NSW 2540",
+   "Mr Pham",
+   "Hanh",
+   "Pham Family Superannuation Fund"
+  ],
+  "must_keep": [
+   "SMSF Trustee Application",
+   "VAS",
+   "IVV",
+   "TKT-830077",
+   "AU-0163",
+   "2026-09-18 at 11:30",
+   "20 percent"
+  ]
+ },
+ "doc34_call_note_hk_en.docx": {
+  "format": "docx",
+  "lang": "en",
+  "pii": [
+   "Lau Kwok-wai",
+   "Ricky",
+   "G654321(8)",
+   "004-123-456789-833",
+   "+852 9765 4321",
+   "ricky.lau@example.org",
+   "rickylau_hk",
+   "rickylau.line",
+   "Room 1203, 12/F, Wing On Centre, 111 Connaught Road Central, Hong Kong",
+   "Ms Cheung Mei-ling"
+  ],
+  "must_keep": [
+   "AU-0144",
+   "800 units of 2800.HK",
+   "Crane HK",
+   "HSBC HK",
+   "Call Note",
+   "2026-09-21 10:05",
+   "Compliance HK"
+  ]
+ },
+ "doc35_account_closure_mixed.docx": {
+  "format": "docx",
+  "lang": "mixed",
+  "pii": [
+   "Wu Zhihao",
+   "吴志豪",
+   "Hao",
+   "CB-77031258",
+   "0468 200 331",
+   "zhihao.wu@example.net",
+   "吴太太",
+   "Mrs Wu",
+   "+86 137 7788 9900",
+   "012-345-6789"
+  ],
+  "must_keep": [
+   "Account Closure Request",
+   "销户申请",
+   "USD 2,140.66",
+   "AU-0092",
+   "TKT-831456",
+   "DBS Singapore",
+   "2026-09-22"
+  ]
+ },
+ "doc36_gift_transfer_en.docx": {
+  "format": "docx",
+  "lang": "en",
+  "pii": [
+   "Seo-yeon Jung",
+   "CB-30921177",
+   "09/05/1979",
+   "Min-jun Jung",
+   "2001-02-14",
+   "3/12 Kent St, Epping NSW 2121",
+   "0455 320 118",
+   "Minjun",
+   "0466 320 118",
+   "sy.jung@example.com",
+   "minjun.jung@example.com",
+   "M12345678",
+   "M87654321",
+   "S.Y. Jung"
+  ],
+  "must_keep": [
+   "Off-market Transfer Request",
+   "250 shares of TSLA",
+   "AUD 92.10",
+   "Crane Brokers Transfers",
+   "gift"
+  ]
+ }
+}

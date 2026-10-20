@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "panda"
+version = "0.1.0"
+description = "Offline PII sanitiser for English and Chinese client communications"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "William Hindley" }]
+keywords = ["pii", "anonymisation", "redaction", "privacy", "spacy", "chinese"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Security",
+    "Topic :: Text Processing",
+]
+# requirements.txt locks the full graph; exact direct pins keep the wheel metadata
+# truthful. spaCy publishes its English model on GitHub rather than PyPI, so it is a
+# hash-pinned direct reference: pip fetches and verifies it at install time, and
+# nothing is downloaded at runtime.
+dependencies = [
+    "beautifulsoup4==4.12.3",
+    "en-core-web-md @ https://github.com/explosion/spacy-models/releases/download/en_core_web_md-3.8.0/en_core_web_md-3.8.0-py3-none-any.whl#sha256=5e6329fe3fecedb1d1a02c3ea2172ee0fede6cea6e4aefb6a02d832dba78a310",
+    "jieba==0.42.1",
+    "lxml==6.1.1",
+    "pypdf==5.1.0",
+    "python-docx==1.1.2",
+    "spacy==3.8.16",
+]
+
+[project.urls]
+Homepage = "https://github.com/whindley5/panda"
+Issues = "https://github.com/whindley5/panda/issues"
+
+[project.scripts]
+panda = "panda.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+# The offline HTML report template ships inside the package.
+panda = ["report_template.html"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+# Synthetic corpus generators are test data written as data, not maintained code.
+extend-exclude = ["tests/fixtures"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+filterwarnings = [
+    # beautifulsoup4 4.12.3 passes strip_cdata to lxml's HTMLParser, which Python
+    # 3.14 deprecated. Third-party and harmless; Panda supports 3.11+.
+    "ignore:The 'strip_cdata' option:DeprecationWarning",
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Synthetic corpus text is data; wrapping it would obscure the documents it builds.
+"scripts/realistic_eval.py" = ["E501"]

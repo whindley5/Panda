@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 506" width="780" height="506" role="img" aria-label="A chat transcript before and after Panda: names, date of birth, phone numbers, address, account number and email are replaced with obvious dummy values.">
+<style>
+  .card { fill: #ffffff; stroke: #d0d7de; }
+  .bar { fill: #f6f8fa; }
+  .rule { stroke: #d0d7de; }
+  .dot { fill: #d0d7de; }
+  text { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  .title { font-size: 13px; fill: #57606a; }
+  .code { font-size: 14px; fill: #24292f; }
+  .pii { fill: #cf222e; font-weight: 600; }
+  .rep { fill: #1a7f37; font-weight: 600; }
+  .tagpii { font-size: 12px; fill: #cf222e; font-weight: 600; }
+  .tagrep { font-size: 12px; fill: #1a7f37; font-weight: 600; }
+  .arrow { stroke: #8c959f; fill: none; stroke-width: 2; }
+  .head { fill: #8c959f; }
+  .cmd { font-size: 13px; fill: #57606a; }
+  @media (prefers-color-scheme: dark) {
+    .card { fill: #0d1117; stroke: #30363d; }
+    .bar { fill: #161b22; }
+    .rule { stroke: #30363d; }
+    .dot { fill: #30363d; }
+    .title, .cmd { fill: #8b949e; }
+    .code { fill: #e6edf3; }
+    .pii, .tagpii { fill: #ff7b72; }
+    .rep, .tagrep { fill: #3fb950; }
+    .arrow { stroke: #6e7681; }
+    .head { fill: #6e7681; }
+  }
+</style>
+<g transform="translate(0,0)">
+<rect class="card" x="0.5" y="0.5" width="779" height="220" rx="10"/>
+<path class="bar" d="M0.5 10.5 a10 10 0 0 1 10 -10 h759 a10 10 0 0 1 10 10 v24 h-779 z"/>
+<line class="rule" x1="0.5" x2="779.5" y1="34" y2="34"/>
+<circle class="dot" cx="20" cy="17" r="5"/><circle class="dot" cx="37" cy="17" r="5"/><circle class="dot" cx="54" cy="17" r="5"/>
+<text class="title" x="76" y="22">Erica Lee chat.html</text>
+<text class="tagpii" x="762" y="22" text-anchor="end">contains personal data</text>
+<text class="code" x="20" y="56" xml:space="preserve">[Customer]<tspan class="pii">Erica Lee</tspan> 09:12</text>
+<text class="code" x="20" y="79" xml:space="preserve">Hi, my DOB is <tspan class="pii">14/03/1984</tspan> and my mobile is <tspan class="pii">0412 908 771</tspan>.</text>
+<text class="code" x="20" y="102" xml:space="preserve">[agent]AU-0102 09:13</text>
+<text class="code" x="20" y="125" xml:space="preserve">Thanks <tspan class="pii">Erica</tspan>. Is <tspan class="pii">42 Kembla Street, Wollongong NSW 2500</tspan> current?</text>
+<text class="code" x="20" y="148" xml:space="preserve">[Customer]<tspan class="pii">Erica Lee</tspan> 09:14</text>
+<text class="code" x="20" y="171" xml:space="preserve">Yes. Account <tspan class="pii">ACC-5540912</tspan>, email <tspan class="pii">erica.lee@example.com</tspan></text>
+<text class="code" x="20" y="194" xml:space="preserve">我太太<tspan class="pii">王秀英</tspan>的电话是 <tspan class="pii">13512340987</tspan>。</text>
+</g>
+<line class="arrow" x1="390.0" y1="231" x2="390.0" y2="269"/>
+<path class="head" d="M383.0 267 L397.0 267 L390.0 277 z"/>
+<text class="cmd" x="408.0" y="258.0">panda run ~/Documents/Batch</text>
+<g transform="translate(0,285)">
+<rect class="card" x="0.5" y="0.5" width="779" height="220" rx="10"/>
+<path class="bar" d="M0.5 10.5 a10 10 0 0 1 10 -10 h759 a10 10 0 0 1 10 10 v24 h-779 z"/>
+<line class="rule" x1="0.5" x2="779.5" y1="34" y2="34"/>
+<circle class="dot" cx="20" cy="17" r="5"/><circle class="dot" cx="37" cy="17" r="5"/><circle class="dot" cx="54" cy="17" r="5"/>
+<text class="title" x="76" y="22">Alan Hollis chat.html</text>
+<text class="tagrep" x="762" y="22" text-anchor="end">sanitised + verified</text>
+<text class="code" x="20" y="56" xml:space="preserve">[Customer]<tspan class="rep">Alan Hollis</tspan> 09:12</text>
+<text class="code" x="20" y="79" xml:space="preserve">Hi, my DOB is <tspan class="rep">01/01/1990</tspan> and my mobile is <tspan class="rep">0400000000</tspan>.</text>
+<text class="code" x="20" y="102" xml:space="preserve">[agent]AU-0102 09:13</text>
+<text class="code" x="20" y="125" xml:space="preserve">Thanks <tspan class="rep">Alan Hollis</tspan>. Is <tspan class="rep">16 Sample Street, Sampleton NSW 2000</tspan> current?</text>
+<text class="code" x="20" y="148" xml:space="preserve">[Customer]<tspan class="rep">Alan Hollis</tspan> 09:14</text>
+<text class="code" x="20" y="171" xml:space="preserve">Yes. Account <tspan class="rep">00000000</tspan>, email <tspan class="rep">john.doe@example.com</tspan></text>
+<text class="code" x="20" y="194" xml:space="preserve">我太太<tspan class="rep">张三</tspan>的电话是 <tspan class="rep">0400000000</tspan>。</text>
+</g>
+</svg>
