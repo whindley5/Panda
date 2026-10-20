@@ -51,6 +51,9 @@ rewrote a simple, standalone version; used it for the class and then decided to 
 # Install (Python 3.11+, Linux or macOS). pipx keeps Panda in its own environment.
 pipx install git+https://github.com/whindley5/panda.git
 
+# or use UV (faster)
+uv tool install git+https://github.com/whindley5/panda.git 
+
 # Sanitise a folder (and its subfolders)
 panda run ~/Documents/Batch --html
 ```
